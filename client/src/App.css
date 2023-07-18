@@ -1,42 +1,61 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+main {
+    min-height: 80vh;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+    height: 4rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.rating span {
+    margin: 0.1rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.rating svg {
+    color: #f8e825;
 }
 
-.card {
-  padding: 2em;
+.rating-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding-left: 0.5rem;
 }
 
-.read-the-docs {
-  color: #888;
+.product-title {
+    height: 2.5em;
+    /* Set a fixed height */
+    overflow: hidden;
+    /* Hide overflow content */
+    text-overflow: ellipsis;
+    /* Add ellipsis for long text */
+    white-space: nowrap;
+    /* Prevent wrapping */
+}
+
+table td,
+table th {
+    text-align: center;
+}
+
+.review {
+    margin-top: 30px;
+}
+
+.review h2 {
+    font-size: 24px;
+    background: #f4f4f4;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.review button {
+    margin-top: 10px;
+}
+
+.carousel-caption {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
 }
