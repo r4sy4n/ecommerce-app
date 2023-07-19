@@ -17,7 +17,7 @@ app.use( morgan('dev') );
 app.use( helmet() );
 
 app.get( '/', ( request, response ) => {
-    response.send({ message: `Express server for Ecommerce App`});
+    response.send({ message: `Express server for Ecommerce App V2`});
 });
 
 app.listen( PORT, () => {
