@@ -1,20 +1,24 @@
-import { Container } from 'react-bootstrap';
 import './App.css';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import SharedLayout from './pages/SharedLayout';
+import { 
+  BrowserRouter,
+  Route,
+  Routes,
+} from 'react-router-dom';
+import HomeScreen from './pages/HomeScreen';
+import ProductScreen from './pages/ProductScreen';
 
 
 const App = () => {
   return (
-    <>
-      <Header/>
-      <main className='py-3'>
-        <Container>
-          <h1>Ecom v2</h1>
-        </Container>
-      </main>
-      <Footer/>
-    </>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<SharedLayout/>} >
+            <Route index element={<HomeScreen />} />
+            <Route path='products/:id' element={<ProductScreen />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
   )
 }
 
