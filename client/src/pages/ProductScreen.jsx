@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Row, Col, Image, ListGroup, Card, Button, ListGroupItem } from 'react-bootstrap';
+import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from "../components/Rating";
 import products from "../products";
 
@@ -7,7 +7,7 @@ const ProductScreen = () => {
     const { id } = useParams();
     const productId = Number(id);
     const product = products.find((p) => p._id === productId);
-    console.log(product)
+
   return (
     <>
         <Link className="btn btn-light my-3" to='/'>
