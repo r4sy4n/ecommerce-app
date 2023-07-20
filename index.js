@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -5,10 +6,9 @@ const PORT = process.env.PORT || 8000;
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const MONGO_URI = process.env.MONGO_URI;
 
-require('dotenv').config();
-
-// mongoose.connect('mongodb://localhost:27017/databasenamedb')
+mongoose.connect(`${MONGO_URI}`);
 
 const app = express();
 app.use( bodyParser.json() );
