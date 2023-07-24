@@ -45,7 +45,7 @@ router.post('/login', ( request, response ) => {
                     id: dbResponse._id, 
                     name: dbResponse.username, 
                     email: dbResponse.email, 
-                   isAdmin: dbResponse.isAdmin 
+                    isAdmin: dbResponse.isAdmin 
                 }, SECRET, {
                     expiresIn: JWT_EXPIRE_TIME
                 } );
