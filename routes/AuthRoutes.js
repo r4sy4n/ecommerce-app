@@ -8,6 +8,27 @@ const JWT_EXPIRE_TIME = process.env.JWT_EXPIRE_TIME;
 const COOKIE_EXPIRE_TIME = process.env.COOKIE_EXPIRE_TIME;
 
 
+//POST Endpoint to create user
+router.post('/register', ( request, response ) => {
+    User.find({ $or: [ { username: request.body.username }, { email: request.body.email } ]}).then(dbResponse => {
+        if( dbResponse.length > 0 ){
+            //  db has record of response
+            response.status( 400 ).send({ error: 'User already exists' });
+        }else{
+             bcrypt.hash( request.body.password, 10 ).then((hash, err) => {
+                const newUser = new User({ 
+                    username: request.body.username, 
+                    email: request.body.email,  
+                    password: hash,
+                    isAdmin: request.body.isAdmin
+                });
+                newUser.save().then( dbResponse => {
+                    response.status( 201 ).send({ newUser: { username: dbResponse.username, email: dbResponse.email, isAdmin: dbResponse.isAdmin }});
+                });
+            });
+        };
+    })
+});
 
 //POST Endpoint to login user
 router.post('/login', ( request, response ) => {
@@ -36,6 +57,13 @@ router.post('/login', ( request, response ) => {
                     success: true });
             };
         });
+    });
+});
+
+router.post('/logout', ( request, response ) => {
+    response.clearCookie('token', { httpOnly: true, expiresIn: new Date(Date.now()) } ).status( 200 ).send({
+        message: 'Logout Successful',
+        success: true
     });
 });
 
