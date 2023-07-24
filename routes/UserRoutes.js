@@ -20,26 +20,27 @@ router.get('/profile', verify, ( request, response ) => {
 });
 
 //PUT Endpoint to edit/update user profile
-router.put('/profile', verify, ( request, response ) => {
-    User.findByIdAndUpdate( request.user._id, request.body, { new: true } ).then( dbResponse => {
-        if(request.body.password){
-            bcrypt.hash( request.body.password, 10 ).then((hash, err) => {
-                response.status( 200 ).send({ 
-                    updatedUser: { 
-                        username: dbResponse.username, 
-                        email: dbResponse.email, 
-                        password: hash, 
-                        isAdmin: dbResponse.isAdmin 
-                    },
-                    message: 'Changes Saved'});
+router.put('/profile', verify, (request, response) => {
+    User.findByIdAndUpdate(request.user._id, request.body, { new: true }).then((updatedUser) => {
+        if (request.body.password) {
+          bcrypt.hash(request.body.password, 10).then((hash, err) => {
+              updatedUser.password = hash; // Set the hashed password in the updatedUser object
+              return updatedUser.save(); // Save the updated user with the new hashed password
+            }).then((savedUser) => {
+              response.status( 200 ).send({
+                updatedUser: savedUser,
+                message: 'Changes Saved'
+              });
+            }).catch((error) => {
+              response.status( 500 ).send({ error: 'Internal Server Error' });
             });
-        }else{
-            response.status( 200 ).send({ user: dbResponse, message: 'Changes Saved' });
+        } else {
+          response.status( 200 ).send({ user: updatedUser, message: 'Changes Saved' });
         }
-    }).catch( (e) => {
-        response.status( 404 ).send({ error: e.message });
-    })
-});
+      }).catch((error) => {
+        response.status(404).send({ error: error.message });
+      });
+  });
 
 
 module.exports = router;
