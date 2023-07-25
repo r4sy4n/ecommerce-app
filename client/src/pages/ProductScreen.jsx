@@ -1,69 +1,88 @@
 import { useParams, Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from "../components/Rating";
-import products from "../products";
+import { useEffect, useState } from "react";
+import Loading from "../components/Loading";
+import axios from "axios";
 
 const ProductScreen = () => {
     const { id } = useParams();
-    const productId = Number(id);
-    const product = products.find((p) => p._id === productId);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`).then( response => {
+            setProducts(response.data.products)
+            setLoading(false)
+        }).catch((error) => {
+            console.log(error)
+            setLoading(false)
+        })
+    }, [id])
 
   return (
     <>
-        <Link className="btn btn-light my-3" to='/'>
-            Back
-        </Link>
-        <Row>
-            <Col md={5}>
-                <Image src={product.images} alt={product.productName} fluid />
-            </Col>
-            <Col md={4}>
-                <ListGroup variant="flush">
-                    <ListGroup.Item>
-                        <h3>{product.productName}</h3>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        <Rating value={product.ratings} text={`${product.numOfReviews} Reviews`} />
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        Price: ₱{product.price}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                        Description: {product.description}
-                    </ListGroup.Item>
-                </ListGroup>
-            </Col>
-            <Col md={3}>
-                <Card>
-                    <ListGroup variant="flush">
-                        <ListGroup.Item>
-                            <Row>
-                                <Col>Price:</Col>
-                                <Col>
-                                    <strong>₱{product.price}</strong>
-                                </Col>
-                            </Row>
-                        </ListGroup.Item>
-                        <ListGroup.Item>
-                            <Row>
-                                <Col>Status:</Col>
-                                <Col>
-                                    <strong>{product.stock === 0 ? '' : product.stock} {product.stock > 0 ? 'In Stock' : 'Out Of Stock'}</strong>
-                                </Col>
-                            </Row>
-                        </ListGroup.Item>
-                        <ListGroup.Item>
-                            <Button 
-                                className="btn-block"
-                                type="button"
-                                disabled={product.stock === 0}>
-                                Add To Cart
-                            </Button>
-                        </ListGroup.Item>
-                    </ListGroup>
-                </Card>
-            </Col>
-        </Row>
+        {loading ? <Loading/> : (
+            <div>
+                <Link className="btn btn-dark my-3" to='/'>
+                    Back
+                </Link>
+                <Row>
+                    <Col md={5}>
+                        <Card className="my-3 p-3 rounded">
+                            <Card.Img src={products.images} alt={products.productName} fluid='true' />
+                        </Card>
+                    </Col>
+                    <Col md={4}>
+                        <ListGroup variant="flush">
+                            <ListGroup.Item>
+                                <h3>{products.productName}</h3>
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                <Rating value={products.ratings} text={`${products.numOfReviews} Reviews`} />
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                Price: ₱{products.price}
+                            </ListGroup.Item>
+                            <ListGroup.Item>
+                                Description: {products.description}
+                            </ListGroup.Item>
+                        </ListGroup>
+                    </Col>
+                    <Col md={3}>
+                        <Card>
+                            <ListGroup variant="flush">
+                                <ListGroup.Item>
+                                    <Row>
+                                        <Col>Price:</Col>
+                                        <Col>
+                                            <strong>₱{products.price}</strong>
+                                        </Col>
+                                    </Row>
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    <Row>
+                                        <Col>Status:</Col>
+                                        <Col>
+                                            <strong>{products.stock === 0 ? '' : products.stock} {products.stock > 0 ? 'In Stock' : 'Out Of Stock'}</strong>
+                                        </Col>
+                                    </Row>
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    <Button 
+                                        className="btn-block"
+                                        type="button"
+                                        disabled={products.stock === 0}>
+                                        Add To Cart
+                                    </Button>
+                                </ListGroup.Item>
+                            </ListGroup>
+                        </Card>
+                    </Col>
+                </Row>
+            </div>
+        )}
+        
     </>
   )
 }

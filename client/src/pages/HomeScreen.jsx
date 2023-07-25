@@ -1,20 +1,37 @@
+import { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Product from '../components/Product';
-import products from '../products';
-// import Loading from '../components/Loading';
+import axios from 'axios';
+import Loading from '../components/Loading';
 
 const HomeScreen = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products`).then( response => {
+      setProducts(response.data.products)
+      setLoading(false)
+    }).catch((error) => {
+      console.log(error)
+      setLoading(false)
+    })
+  }, [])
+
   return (
     <>
-      <h1>Latest Products</h1>
-      <Row>
-        {products.map((product) => (
-          <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-            <Product product={product} />
-          </Col>
-        ))}
-
-      </Row>
+      {loading ? <Loading/> : (
+        <div>
+          <h1>Latest Products</h1>
+          <Row>
+            {products.map((product) => (
+              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                <Product product={product} />
+              </Col>
+            ))}
+          </Row>
+        </div>
+      )}
     </>
   );
 };
