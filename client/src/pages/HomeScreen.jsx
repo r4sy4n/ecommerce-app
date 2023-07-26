@@ -19,11 +19,11 @@ const HomeScreen = () => {
     })
   }, []);
 
-  useEffect(() => {
-    // This will log the updated cart value whenever it changes
-    console.log(cart);
-    localStorage.setItem('cart', JSON.stringify(cart))
-  }, [cart]);
+  // useEffect(() => {
+  //   // This will log the updated cart value whenever it changes
+  //   console.log(cart);
+  //   localStorage.setItem('cart', JSON.stringify(cart))
+  // }, [cart]);
 
 
   const handleClick = (product) => {
