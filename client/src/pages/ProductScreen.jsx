@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
+import { Row, Col, Form, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from "../components/Rating";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
@@ -9,6 +9,7 @@ const ProductScreen = () => {
     const { id } = useParams();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [qty, setQty] = useState(1);
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`).then( response => {
@@ -30,7 +31,7 @@ const ProductScreen = () => {
                 <Row>
                     <Col md={5}>
                         <Card className="my-3 p-3 rounded">
-                            <Card.Img src={products.images} alt={products.productName} fluid='true' />
+                            <Card.Img src={products.images} alt={products.productName} fluid />
                         </Card>
                     </Col>
                     <Col md={4}>
@@ -68,9 +69,30 @@ const ProductScreen = () => {
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
+
+                                {products.stock > 0 && (
+                                    <ListGroup.Item>
+                                        <Row>
+                                            <Col>Qty</Col>
+                                            <Col>
+                                                <Form.Control
+                                                as="select"
+                                                value={qty}
+                                                onChange={(e) => setQty(Number(e.target.value))}>
+                                                    {[...Array(products.stock).keys()].map((x) => (
+                                                        <option key={ x + 1} value={ x + 1 }>
+                                                            { x + 1 }
+                                                        </option>
+                                                    ))}
+                                                </Form.Control>
+                                            </Col>
+                                        </Row>
+                                    </ListGroup.Item>
+                                )}
+
                                 <ListGroup.Item>
                                     <Button 
-                                        className="btn-block"
+                                        className="btn-block btn-warning"
                                         type="button"
                                         disabled={products.stock === 0}>
                                         Add To Cart
