@@ -7,7 +7,7 @@ import Loading from '../components/Loading';
 const HomeScreen = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState([]);
+  // const [cart, setCart] = useState([]);
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products`).then( response => {
@@ -26,10 +26,10 @@ const HomeScreen = () => {
   // }, [cart]);
 
 
-  const handleClick = (product) => {
-    setCart([...cart, product])
-    localStorage.setItem('cart', JSON.stringify(cart))
-  }
+  // const handleClick = (product) => {
+  //   setCart([...cart, product])
+  //   localStorage.setItem('cart', JSON.stringify(cart))
+  // }
 
   return (
     <>
@@ -39,7 +39,9 @@ const HomeScreen = () => {
           <Row>
             {products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} handleClick={handleClick} />
+                <Product product={product} 
+                // handleClick={handleClick}
+                 />
               </Col>
             ))}
           </Row>

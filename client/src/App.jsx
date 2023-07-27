@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import HomeScreen from './pages/HomeScreen';
 import ProductScreen from './pages/ProductScreen';
-
+import CartScreen from './pages/CartScreen';
 
 const App = () => {
   return (
@@ -16,6 +16,7 @@ const App = () => {
           <Route path='/' element={<SharedLayout/>} >
             <Route index element={<HomeScreen />} />
             <Route path='products/:id' element={<ProductScreen />} />
+            <Route path='/cart' element={<CartScreen />} />
           </Route>
         </Routes>
       </BrowserRouter>

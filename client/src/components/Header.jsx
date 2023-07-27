@@ -1,9 +1,19 @@
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Badge } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
 import logo from '../assets/images/logo.png';
+import { CartContext } from '../context/CartContext';
+import { useContext, useEffect, useState } from 'react';
 
 const Header = () => {
+    const { cart } = useContext(CartContext);
+    const [cartItems, setCartItems] = useState(0);
+    console.log("Cart in Header:", cart);
+
+    useEffect(() => {
+        setCartItems(cart.reduce((total, item) => total + item.qty, 0))
+    },[cartItems, cart])
+    
   return (
     <header>
         <Navbar bg='info' data-bs-theme='light' expand='md' collapseOnSelect>
@@ -19,6 +29,13 @@ const Header = () => {
                         <LinkContainer to='/cart'>
                             <Nav.Link>
                                 <FaShoppingCart/> Cart
+                                {
+                                    cart.length > 0 && (
+                                        <Badge pill bg='danger' style={{marginLeft: '5px'}}>
+                                            {cartItems}
+                                        </Badge>
+                                    )
+                                }
                             </Nav.Link>
                         </LinkContainer>
                         <LinkContainer to='/login'>

@@ -1,9 +1,15 @@
-import { Card, Button } from "react-bootstrap";
+import { 
+    Card, 
+    // Button 
+} from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import Rating from "./Rating";
-import { FaCartPlus } from 'react-icons/fa';
+// import { FaCartPlus } from 'react-icons/fa';
 
-const Product = ({ product, handleClick }) => {
+const Product = ({ 
+    product, 
+    // handleClick 
+}) => {
     
   return (
     <Card className="my-3 p-3 rounded">
@@ -22,13 +28,13 @@ const Product = ({ product, handleClick }) => {
             <Card.Text as="h3">
                 ₱{product.price}
             </Card.Text>
-            <Button 
+            {/* <Button 
                 className="btn-block btn-warning"
                 type="button"
                 disabled={product.stock === 0}
                 onClick={() => handleClick(product)}>
                 <FaCartPlus/>
-            </Button>
+            </Button> */}
         </Card.Body>
     </Card>
   )
