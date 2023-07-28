@@ -9,10 +9,17 @@ const CartProvider = ({ children }) => {
     return localCart ? JSON.parse(localCart) : [];
   });
 
+    // Calculate the total price of all items in the cart
+  const totalCartPrice = cart.reduce(
+    (total, item) => total + item.price,
+    0
+  );
+
   useEffect(() => {
     // Update localStorage whenever the cart changes
     localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    localStorage.setItem("totalCartPrice", JSON.stringify(totalCartPrice));
+  }, [cart, totalCartPrice]);
 
   const addToCart = (itemToAdd) => {
     const existingItem = cart.find((item) => item._id === itemToAdd._id);

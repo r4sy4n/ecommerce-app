@@ -1,30 +1,11 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Row, Col, Form, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from "../components/Rating";
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState, useContext } from "react";
 import Loading from "../components/Loading";
 import axios from "axios";
+import { CartContext } from "../context/CartContext";
 
-const cartReducer = (state, action) => {
-    const existingItem = state.find(item => item._id === action.payload._id);
-  switch (action.type) {
-    case "ADD_TO_CART":
-      // Check if the item already exists in the cart
-      if (existingItem) {
-        // If the item exists, update the quantity
-        return state.map(item =>
-          item._id === action.payload._id
-            ? { ...item, qty: item.qty + action.payload.qty, price: item.price + action.payload.price }
-            : item
-        );
-      } else {
-        // If the item does not exist, add it to the cart
-        return [...state, { ...action.payload }];
-      }
-    default:
-      return state;
-  }
-};
 
 const ProductScreen = () => {
   const { id } = useParams();
@@ -32,30 +13,20 @@ const ProductScreen = () => {
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
-
+  
+  const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
-
-  const [cart, dispatch] = useReducer(cartReducer, [], () => {
-    // Initialize cart state from localStorage
-    const localCart = localStorage.getItem("cart");
-    return localCart ? JSON.parse(localCart) : [];
-  });
-  console.log("initial state:", cart)
   
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`)
-      .then((response) => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`).then((response) => {
         setProducts(response.data.products);
         setLoading(false);
-      })
-      .catch((error) => {
+      }).catch((error) => {
         console.log(error);
         setLoading(false);
       });
   }, [id]);
 
-// console.log(products)
   const handleAddToCart = () => {
     // Prepare the item to add to the cart
     const itemToAdd = {
@@ -66,10 +37,8 @@ const ProductScreen = () => {
       image: products.images,
       stock: products.stock,
     };
-    console.log("Item to add:", itemToAdd);
-
     // Dispatch the action to add the item to the cart
-    dispatch({ type: "ADD_TO_CART", payload: itemToAdd });
+    addToCart(itemToAdd);
     setAddedToCart(true);
   };
 
@@ -79,19 +48,6 @@ const ProductScreen = () => {
       navigate('/cart');
     }
   }, [addedToCart, navigate]);
-  
-
-  // Calculate the total price of all items in the cart
-  const totalCartPrice = cart.reduce(
-    (total, item) => total + item.price,
-    0
-  );
-
-  // Update localStorage whenever the cart changes or the total price changes
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("totalCartPrice", JSON.stringify(totalCartPrice));
-  }, [cart, totalCartPrice]);
 
   return (
     <>

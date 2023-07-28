@@ -8,7 +8,6 @@ import { useContext, useEffect, useState } from 'react';
 const Header = () => {
     const { cart } = useContext(CartContext);
     const [cartItems, setCartItems] = useState(0);
-    console.log("Cart in Header:", cart);
 
     useEffect(() => {
         setCartItems(cart.reduce((total, item) => total + item.qty, 0))
@@ -30,11 +29,9 @@ const Header = () => {
                             <Nav.Link>
                                 <FaShoppingCart/> Cart
                                 {
-                                    cart.length > 0 && (
-                                        <Badge pill bg='danger' style={{marginLeft: '5px'}}>
-                                            {cartItems}
-                                        </Badge>
-                                    )
+                                    <Badge pill bg='danger' style={{marginLeft: '5px'}}>
+                                        {cartItems}
+                                    </Badge>
                                 }
                             </Nav.Link>
                         </LinkContainer>

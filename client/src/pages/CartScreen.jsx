@@ -4,11 +4,9 @@ import { FaTrash } from 'react-icons/fa';
 import { CartContext } from '../context/CartContext';
 import { useContext } from 'react';
 
-
 const CartScreen = () => {
   const { cart } = useContext(CartContext);
   const navigate = useNavigate();
-
 
   return (
     <Row>
