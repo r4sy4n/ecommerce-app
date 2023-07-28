@@ -1,13 +1,19 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import { CartContext } from '../context/CartContext';
 import { useContext } from 'react';
 
 const CartScreen = () => {
-  const { cart } = useContext(CartContext);
-  const navigate = useNavigate();
+  const { cart, updateCartItemQty  } = useContext(CartContext);
+  // const { addToCart } = useContext(CartContext);
 
+  // const navigate = useNavigate();
+
+  const handleQtyChange = (item, newQty) => {
+    updateCartItemQty(item._id, newQty);
+  };
+  
   return (
     <Row>
       <Col md={8}>
@@ -34,7 +40,7 @@ const CartScreen = () => {
                   <Form.Control
                     as="select"
                     value={item.qty}
-                    onChange={() => {}}>
+                    onChange={(e) => {handleQtyChange(item, Number(e.target.value))}}>
                         {[...Array(item.stock).keys()].map((x) => (
                             <option key={ x + 1} value={ x + 1 }>
                                 { x + 1 }

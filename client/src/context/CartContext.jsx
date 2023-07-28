@@ -9,17 +9,19 @@ const CartProvider = ({ children }) => {
     return localCart ? JSON.parse(localCart) : [];
   });
 
-    // Calculate the total price of all items in the cart
-  const totalCartPrice = cart.reduce(
-    (total, item) => total + item.price,
-    0
-  );
+
+   // Calculate the total price based on the cart state
+  const calculateTotalPrice = (cartItems) => {
+    return cartItems.reduce((total, item) => total + (item.price * item.qty), 0);
+  };
 
   useEffect(() => {
+    // Calculate the total price whenever the cart changes
+    const totalCartPrice = calculateTotalPrice(cart);
     // Update localStorage whenever the cart changes
     localStorage.setItem("cart", JSON.stringify(cart));
     localStorage.setItem("totalCartPrice", JSON.stringify(totalCartPrice));
-  }, [cart, totalCartPrice]);
+  }, [cart]);
 
   const addToCart = (itemToAdd) => {
     const existingItem = cart.find((item) => item._id === itemToAdd._id);
@@ -43,6 +45,16 @@ const CartProvider = ({ children }) => {
     }
   };
 
+   const updateCartItemQty = (itemId, newQty) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item._id === itemId
+          ? { ...item, qty: newQty }
+          : item
+      )
+    );
+  };
+
   const removeFromCart = (itemId) => {
     setCart((prevCart) => prevCart.filter((item) => item._id !== itemId));
   };
@@ -56,6 +68,7 @@ const CartProvider = ({ children }) => {
       value={{
         cart,
         addToCart,
+        updateCartItemQty,
         removeFromCart,
         clearCart,
       }}
