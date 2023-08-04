@@ -1,19 +1,37 @@
-import { Link } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { CartContext } from '../context/CartContext';
+import { Link, useNavigate } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
-import { CartContext } from '../context/CartContext';
-import { useContext } from 'react';
+import axios from 'axios';
+
 
 const CartScreen = () => {
-  const { cart, updateCartItemQty  } = useContext(CartContext);
+  const { cart, totalCartPrice, updateCartItemQty  } = useContext(CartContext);
   // const { addToCart } = useContext(CartContext);
+  const [cartItems, setCartItems] = useState();
+  const navigate = useNavigate();
 
-  // const navigate = useNavigate();
-
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/v1/cartitems`).then( response => {
+      setCartItems(response.data.products)
+      // setLoading(false)
+    }).catch((error) => {
+      console.log(error)
+      // setLoading(false)
+    })
+  })
+console.log(cartItems)
   const handleQtyChange = (item, newQty) => {
     updateCartItemQty(item._id, newQty);
   };
   
+  console.log(totalCartPrice)
+
+const checkOutHandler = () => {
+  navigate('/login?redirect=/shipping')
+}
+
   return (
     <Row>
       <Col md={8}>
@@ -65,10 +83,10 @@ const CartScreen = () => {
               <h2>
                 Subtotal ({cart.reduce((total, item) => total + item.qty, 0)}) items
               </h2>
-              ₱{cart.reduce((total, item) => total + item.price, 0).toFixed(2)}
+              ₱{totalCartPrice.toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button type='button' className='btn-block btn-warning'>
+              <Button type='button' className='btn-block btn-warning' onClick={ checkOutHandler }>
                 Proceed to Checkout
               </Button>
             </ListGroup.Item>

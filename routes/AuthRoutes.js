@@ -34,7 +34,7 @@ router.post('/register', ( request, response ) => {
 router.post('/login', ( request, response ) => {
     User.findOne({ email: request.body.email }).select('+password').then( dbResponse => {
         if( !dbResponse ){
-            return response.status( 404 ).send({ error: 'Email does not exist' });
+            return response.status( 404 ).send({ error: 'Invalid email or password!' });
         }
         bcrypt.compare( request.body.password, dbResponse.password ).then( isValid => {
             if( !isValid ){
@@ -52,7 +52,9 @@ router.post('/login', ( request, response ) => {
                      // Set the expiration time for the cookie (e.g., 1 day)
                 const expirationTime = 24 * 60 * 60 * 1000; // 1 day in milliseconds
                 const expirationDate = new Date(Date.now() + COOKIE_EXPIRE_TIME * expirationTime);
-                response.cookie('token', token, { httpOnly: true, sameSite: 'strict', expiresIn: expirationDate }).status( 200 ).send({ 
+                response.cookie('token', token, { httpOnly: true, sameSite: 'strict', expiresIn: expirationDate }).status( 200 ).send({
+                    username: dbResponse.username,
+                    email: dbResponse.email,
                     message: 'Login Successful',
                     success: true });
             };

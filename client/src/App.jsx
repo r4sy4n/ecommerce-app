@@ -5,9 +5,12 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import HomeScreen from './pages/HomeScreen';
 import ProductScreen from './pages/ProductScreen';
 import CartScreen from './pages/CartScreen';
+import LoginScreen from './pages/LoginScreen';
 
 const App = () => {
   return (
@@ -17,8 +20,10 @@ const App = () => {
             <Route index element={<HomeScreen />} />
             <Route path='products/:id' element={<ProductScreen />} />
             <Route path='/cart' element={<CartScreen />} />
+            <Route path='/login' element={<LoginScreen />} />
           </Route>
         </Routes>
+        <ToastContainer autoClose='3000' position='top-center'/>
       </BrowserRouter>
   )
 }

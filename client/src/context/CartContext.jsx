@@ -63,10 +63,13 @@ const CartProvider = ({ children }) => {
     setCart([]);
   };
 
+  const totalCartPrice = calculateTotalPrice(cart);
+
   return (
     <CartContext.Provider
       value={{
         cart,
+        totalCartPrice,
         addToCart,
         updateCartItemQty,
         removeFromCart,
