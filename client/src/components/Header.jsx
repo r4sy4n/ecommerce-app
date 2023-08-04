@@ -25,7 +25,6 @@ const Header = () => {
             localStorage.removeItem('userInfo')
             setUserInfo(null);
             toast.success(response.data.message)
-            console.log(response.data)
             navigate('/login')
         }).catch(error => {
             toast.error(error.response.data.error)

@@ -23,6 +23,8 @@ const LoginScreen = () => {
     }
   },[userInfo, redirect, navigate])
 
+// Set the default Axios configuration to include credentials
+axios.defaults.withCredentials = true;
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -51,7 +53,7 @@ const LoginScreen = () => {
                 ></Form.Control>
             </Form.Group>
             <Form.Group controlId='password' className='my-3'>
-                <Form.Label>password</Form.Label>
+                <Form.Label>Password</Form.Label>
                 <Form.Control
                     type='password'
                     placeholder='Enter password'

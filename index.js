@@ -20,7 +20,7 @@ const CartRoutes = require('./routes/CartRoutes');
 
 const app = express();
 app.use( bodyParser.json() );
-app.use( cors() );
+app.use( cors({ origin: 'http://localhost:3000', credentials: true }) );
 app.use( morgan('dev') );
 app.use( helmet() );
 app.use( cookieParser() );

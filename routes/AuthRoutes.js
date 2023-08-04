@@ -63,7 +63,7 @@ router.post('/login', ( request, response ) => {
 });
 
 router.post('/logout', ( request, response ) => {
-    response.clearCookie('token', { httpOnly: true, expiresIn: new Date(Date.now()) } ).status( 200 ).send({
+    response.clearCookie('token', { httpOnly: true, sameSite: 'strict' } ).status( 200 ).send({
         message: 'Logout Successful',
         success: true
     });
