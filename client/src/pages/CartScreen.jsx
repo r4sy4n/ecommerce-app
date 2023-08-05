@@ -1,37 +1,23 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
-import axios from 'axios';
 
 
 const CartScreen = () => {
   const { cart, totalCartPrice, updateCartItemQty  } = useContext(CartContext);
-  // const { addToCart } = useContext(CartContext);
-  const [cartItems, setCartItems] = useState();
+  const { removeFromCart } = useContext(CartContext);
   const navigate = useNavigate();
-
-  // Set the default Axios configuration to include credentials
-axios.defaults.withCredentials = true;
-
-  useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/api/v1/cartitems`).then( response => {
-      setCartItems(response.data.cart)
-    }).catch((error) => {
-      console.log(error)
-    })
-  }, [cart])
 
   const handleQtyChange = (item, newQty) => {
     updateCartItemQty(item._id, newQty);
   };
   
-  // console.log(totalCartPrice)
 
-const checkOutHandler = () => {
-  navigate('/login?redirect=/shipping')
-}
+  const checkOutHandler = () => {
+    navigate('/login?redirect=/shipping')
+  }
 
   return (
     <Row>
@@ -68,7 +54,7 @@ const checkOutHandler = () => {
                     </Form.Control>
                 </Col>
                 <Col md={2}>
-                  <Button type='button' className='btn-danger' disabled={item.length === 0}>
+                  <Button type='button' className='btn-danger' onClick={() => removeFromCart(item._id)}>
                     <FaTrash />
                   </Button>
                 </Col>
@@ -87,7 +73,7 @@ const checkOutHandler = () => {
               ₱{totalCartPrice.toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button type='button' className='btn-block btn-warning' onClick={ checkOutHandler }>
+              <Button type='button' className='btn-block btn-warning' disabled={cart.length === 0} onClick={ checkOutHandler }>
                 Proceed to Checkout
               </Button>
             </ListGroup.Item>

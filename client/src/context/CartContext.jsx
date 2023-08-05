@@ -25,23 +25,17 @@ const CartProvider = ({ children }) => {
 
   const addToCart = (itemToAdd) => {
     const existingItem = cart.find((item) => item._id === itemToAdd._id);
-
+  
     if (existingItem) {
       // If the item exists, update the quantity
       setCart((prevCart) =>
         prevCart.map((item) =>
-          item._id === itemToAdd._id
-            ? {
-                ...item,
-                qty: item.qty + itemToAdd.qty,
-                price: item.price + itemToAdd.price,
-              }
-            : item
+          item._id === itemToAdd._id ? { ...item, qty: item.qty + itemToAdd.qty } : item
         )
       );
     } else {
-      // If the item does not exist, add it to the cart
-      setCart((prevCart) => [...prevCart, { ...itemToAdd }]);
+      // If the item does not exist, add it to the cart without updating the price
+      setCart((prevCart) => [...prevCart, { ...itemToAdd, price: itemToAdd.price / itemToAdd.qty }]);
     }
   };
 
