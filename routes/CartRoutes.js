@@ -58,7 +58,6 @@ router.post('/addtocart', verify, (request, response) => {
 //GET Endpoint to get all items in cart of current logged in user
 router.get('/', verify, (request, response) => {
     const userId = request.user._id;
-console.log(request)
     CartItem.find({ user: userId }).then(items => {
         response.status( 200 ).send({ cart: items, count: items.length });
     }).catch(err => {

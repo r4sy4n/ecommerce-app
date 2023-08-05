@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { Row, Col, Form, ListGroup, Card, Button } from 'react-bootstrap';
+import { Row, Col, ListGroup, Card, Button } from 'react-bootstrap';
 import Rating from "../components/Rating";
 import { useEffect, useState, useContext } from "react";
 import Loading from "../components/Loading";
@@ -11,7 +11,7 @@ const ProductScreen = () => {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [qty, setQty] = useState(1);
+  const [qty] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
   
   const { addToCart } = useContext(CartContext);
@@ -98,7 +98,7 @@ const ProductScreen = () => {
                                     </Row>
                                 </ListGroup.Item>
 
-                                {products.stock > 0 && (
+                                {/* {products.stock > 0 && (
                                     <ListGroup.Item>
                                         <Row>
                                             <Col>Qty</Col>
@@ -116,7 +116,7 @@ const ProductScreen = () => {
                                             </Col>
                                         </Row>
                                     </ListGroup.Item>
-                                )}
+                                )} */}
 
                                 <ListGroup.Item>
                                     <Button 

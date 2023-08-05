@@ -12,21 +12,22 @@ const CartScreen = () => {
   const [cartItems, setCartItems] = useState();
   const navigate = useNavigate();
 
+  // Set the default Axios configuration to include credentials
+axios.defaults.withCredentials = true;
+
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/v1/cartitems`).then( response => {
-      setCartItems(response.data.products)
-      // setLoading(false)
+      setCartItems(response.data.cart)
     }).catch((error) => {
       console.log(error)
-      // setLoading(false)
     })
-  })
-console.log(cartItems)
+  }, [cart])
+
   const handleQtyChange = (item, newQty) => {
     updateCartItemQty(item._id, newQty);
   };
   
-  console.log(totalCartPrice)
+  // console.log(totalCartPrice)
 
 const checkOutHandler = () => {
   navigate('/login?redirect=/shipping')
@@ -52,7 +53,7 @@ const checkOutHandler = () => {
                   <Link to={`{/products/${item._id}}`}>{item.productName}</Link>
                 </Col>
                 <Col md={2}>
-                  ₱{item.price}
+                  ₱{item.price * item.qty}
                 </Col>
                 <Col md={2}>
                   <Form.Control
