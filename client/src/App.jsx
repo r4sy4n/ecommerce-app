@@ -11,6 +11,7 @@ import HomeScreen from './pages/HomeScreen';
 import ProductScreen from './pages/ProductScreen';
 import CartScreen from './pages/CartScreen';
 import LoginScreen from './pages/LoginScreen';
+import RegisterScreen from './pages/RegisterScreen';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path='products/:id' element={<ProductScreen />} />
             <Route path='/cart' element={<CartScreen />} />
             <Route path='/login' element={<LoginScreen />} />
+            <Route path='/register' element={<RegisterScreen />} />
           </Route>
         </Routes>
         <ToastContainer autoClose='3000' position='top-center'/>

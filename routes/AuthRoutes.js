@@ -23,7 +23,7 @@ router.post('/register', ( request, response ) => {
                     isAdmin: request.body.isAdmin
                 });
                 newUser.save().then( dbResponse => {
-                    response.status( 201 ).send({ newUser: { username: dbResponse.username, email: dbResponse.email, isAdmin: dbResponse.isAdmin }});
+                    response.status( 201 ).send({ message: 'Registration Successful', username: dbResponse.username, email: dbResponse.email, isAdmin: dbResponse.isAdmin, success: true });
                 });
             });
         };
@@ -56,6 +56,7 @@ router.post('/login', ( request, response ) => {
                     username: dbResponse.username,
                     email: dbResponse.email,
                     message: 'Login Successful',
+                    isAdmin: dbResponse.isAdmin,
                     success: true });
             };
         });
