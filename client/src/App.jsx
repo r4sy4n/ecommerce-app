@@ -7,11 +7,13 @@ import {
 } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PrivateRoutes from './components/PrivateRoutes';
 import HomeScreen from './pages/HomeScreen';
 import ProductScreen from './pages/ProductScreen';
 import CartScreen from './pages/CartScreen';
 import LoginScreen from './pages/LoginScreen';
 import RegisterScreen from './pages/RegisterScreen';
+import ShippingScreen from './pages/ShippingScreen';
 
 const App = () => {
   return (
@@ -23,6 +25,10 @@ const App = () => {
             <Route path='/cart' element={<CartScreen />} />
             <Route path='/login' element={<LoginScreen />} />
             <Route path='/register' element={<RegisterScreen />} />
+
+            <Route path='' element={<PrivateRoutes />}>
+              <Route path='/shipping' element={<ShippingScreen />} />
+            </Route>
           </Route>
         </Routes>
         <ToastContainer autoClose='3000' position='top-center'/>

@@ -9,6 +9,12 @@ const CartProvider = ({ children }) => {
     return localCart ? JSON.parse(localCart) : [];
   });
 
+  const [shippingAddress, setShippingAddress] = useState(() => {
+    // Initialize shipping address from localStorage
+    const savedAddress = localStorage.getItem("shippingAddress");
+    return savedAddress ? JSON.parse(savedAddress) : {};
+  });
+
 
    // Calculate the total price based on the cart state
   const calculateTotalPrice = (cartItems) => {
@@ -22,6 +28,14 @@ const CartProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
     localStorage.setItem("totalCartPrice", JSON.stringify(totalCartPrice));
   }, [cart]);
+
+  const saveShippingAddress = (address) => {
+    // Update the state with the new shipping address
+    setShippingAddress(address);
+
+    // Update localStorage with the new shipping address
+    localStorage.setItem("shippingAddress", JSON.stringify(address));
+  };
 
   const addToCart = (itemToAdd) => {
     const existingItem = cart.find((item) => item._id === itemToAdd._id);
@@ -64,6 +78,8 @@ const CartProvider = ({ children }) => {
       value={{
         cart,
         totalCartPrice,
+        shippingAddress,
+        saveShippingAddress,
         addToCart,
         updateCartItemQty,
         removeFromCart,
