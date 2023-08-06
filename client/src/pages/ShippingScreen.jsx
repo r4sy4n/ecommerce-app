@@ -4,6 +4,7 @@ import FormContainer from '../components/FormContainer';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { toast } from 'react-toastify';
+import CheckoutSteps from '../components/CheckoutSteps';
 
 const ShippingScreen = () => {
     const { shippingAddress, saveShippingAddress } = useContext(CartContext);
@@ -43,6 +44,7 @@ const ShippingScreen = () => {
 
   return (
     <FormContainer>
+        <CheckoutSteps step1 step2 />
         <h1>Shipping</h1>
 
         <Form onSubmit={submitHandler}>
