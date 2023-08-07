@@ -14,6 +14,7 @@ import CartScreen from './pages/CartScreen';
 import LoginScreen from './pages/LoginScreen';
 import RegisterScreen from './pages/RegisterScreen';
 import ShippingScreen from './pages/ShippingScreen';
+import PaymentScreen from './pages/PaymentScreen';
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
 
             <Route path='' element={<PrivateRoutes />}>
               <Route path='/shipping' element={<ShippingScreen />} />
+              <Route path='/payment' element={<PaymentScreen />} />
             </Route>
           </Route>
         </Routes>

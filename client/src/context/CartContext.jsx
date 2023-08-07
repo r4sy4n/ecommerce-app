@@ -15,6 +15,11 @@ const CartProvider = ({ children }) => {
     return savedAddress ? JSON.parse(savedAddress) : {};
   });
 
+  const [paymentMethod, setPaymentMethod] = useState(() => {
+    // Initialize payment from localStorage
+    const savedPaymentMethod = localStorage.getItem("paymentMethod");
+    return savedPaymentMethod ? JSON.parse(savedPaymentMethod) : 'Paypal';
+  });
 
    // Calculate the total price based on the cart state
   const calculateTotalPrice = (cartItems) => {
@@ -35,6 +40,13 @@ const CartProvider = ({ children }) => {
 
     // Update localStorage with the new shipping address
     localStorage.setItem("shippingAddress", JSON.stringify(address));
+  };
+  const savePaymentMethod = (payment) => {
+    // Update the state with the new payment method
+    setPaymentMethod(payment);
+
+    // Update localStorage with the new payment method
+    localStorage.setItem("paymentMethod", JSON.stringify(payment));
   };
 
   const addToCart = (itemToAdd) => {
@@ -80,6 +92,8 @@ const CartProvider = ({ children }) => {
         totalCartPrice,
         shippingAddress,
         saveShippingAddress,
+        paymentMethod,
+        savePaymentMethod,
         addToCart,
         updateCartItemQty,
         removeFromCart,
