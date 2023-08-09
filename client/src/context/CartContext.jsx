@@ -18,7 +18,7 @@ const CartProvider = ({ children }) => {
   const [paymentMethod, setPaymentMethod] = useState(() => {
     // Initialize payment from localStorage
     const savedPaymentMethod = localStorage.getItem("paymentMethod");
-    return savedPaymentMethod ? JSON.parse(savedPaymentMethod) : 'Paypal';
+    return savedPaymentMethod ? JSON.parse(savedPaymentMethod) : '';
   });
 
    // Calculate the total price based on the cart state

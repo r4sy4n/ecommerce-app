@@ -16,6 +16,7 @@ const ProductRoutes = require('./routes/ProductRoutes');
 const AuthRoutes = require('./routes/AuthRoutes');
 const AdminRoutes = require('./routes/AdminRoutes');
 const UserRoutes = require('./routes/UserRoutes');
+const OrderRoutes = require('./routes/OrderRoutes');
 const CartRoutes = require('./routes/CartRoutes');
 
 const app = express();
@@ -29,6 +30,7 @@ app.use( `${baseURL}/products`, ProductRoutes );
 app.use( `${baseURL}/auth`, AuthRoutes );
 app.use( `${baseURL}/users/admin`, AdminRoutes );
 app.use( `${baseURL}/users`, UserRoutes );
+app.use( `${baseURL}/orders`, OrderRoutes );
 app.use( `${baseURL}/cartitems`, CartRoutes );
 
 app.get( '/', ( request, response ) => {

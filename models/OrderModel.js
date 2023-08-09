@@ -44,7 +44,7 @@ const OrderSchema = mongoose.Schema({
             type: Number,
             required: true
         },
-        postalCode: {
+        zipCode: {
             type: Number,
             required: true
         },

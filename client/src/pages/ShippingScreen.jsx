@@ -11,6 +11,7 @@ const ShippingScreen = () => {
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [zipCode, setZipCode] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [country, setCountry] = useState('');
     const navigate = useNavigate();
 
@@ -20,19 +21,21 @@ const ShippingScreen = () => {
       setAddress(shippingAddress.address || '');
       setCity(shippingAddress.city || '');
       setZipCode(shippingAddress.zipCode || '');
+      setPhoneNumber(shippingAddress.phoneNumber || '');
       setCountry(shippingAddress.country || '');
     }
   }, [shippingAddress]);
 
     const submitHandler = (e) => {
         e.preventDefault();
-        if(address === '' || city === '' || zipCode === '' || country === ''){
+        if(address === '' || city === '' || zipCode === '' || phoneNumber === '' || country === ''){
             toast.error('All fields required')
         }else{
             const shippingAddress = {
                 address,
                 city,
                 zipCode,
+                phoneNumber,
                 country,
               };
               // Dispatch the action to add the shipping address
@@ -73,6 +76,15 @@ const ShippingScreen = () => {
                     placeholder='Enter zip code'
                     value={zipCode}
                     onChange={(e) => setZipCode(e.target.value)}>
+                </Form.Control>
+            </Form.Group>
+            <Form.Group controlId='phoneNumber' className='my-2'>
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control
+                    type='number'
+                    placeholder='Enter phone number'
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}>
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId='country' className='my-2'>
