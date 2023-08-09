@@ -39,8 +39,8 @@ router.get('/myorders', verify, ( request, response ) => {
     })
 })
 
-//GET Endpoint to get orders by id
-router.get('/:id', verify, restrict, ( request, response ) => {
+//GET Endpoint to get orders by id (order id)
+router.get('/:id', verify, ( request, response ) => {
     Order.findById( request.params.id ).populate('user', 'username email').then(order => {
         if(order){
             response.status( 200 ).send({ orders: order, count: order.length })

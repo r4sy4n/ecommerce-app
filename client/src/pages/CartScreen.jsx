@@ -3,6 +3,7 @@ import { CartContext } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
+import Message from '../components/Message';
 
 
 const CartScreen = () => {
@@ -24,7 +25,7 @@ const CartScreen = () => {
       <Col md={8}>
         <h1 style={{ marginBottom: '20px'}}>Shopping Cart</h1>
         {cart.length === 0 ? (
-        <div>Cart Empty <Link to='/'>Go Back</Link></div>
+        <Message variant='danger'>Cart Empty <Link to='/'>Go Back</Link></Message>
         ) : (
         <ListGroup variant='flush'>
           {cart.map((item) => (
