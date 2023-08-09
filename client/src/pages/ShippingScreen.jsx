@@ -42,7 +42,6 @@ const ShippingScreen = () => {
               saveShippingAddress(shippingAddress);
               navigate('/payment')
         }
-        
     }
 
   return (

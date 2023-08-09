@@ -116,7 +116,7 @@ const PlaceOrderScreen = () => {
                         </ListGroup.Item>
                         <ListGroup.Item>
                             <Row>
-                                <Col>Items:</Col>
+                                <Col>Total Price:</Col>
                                 <Col>
                                     ₱{totalCartPrice}
                                 </Col>
