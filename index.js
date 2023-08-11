@@ -37,6 +37,10 @@ app.get( '/', ( request, response ) => {
     response.send({ message: `Express server for Ecommerce App V2`});
 });
 
+app.get('/api/config/paypal', ( request, response ) => {
+    response.send({ clientId: process.env.PAYPAL_CLIENT_ID })
+})
+
 app.listen( PORT, () => {
     console.log(`Server Running on Port ${PORT}`);
 });
