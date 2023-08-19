@@ -80,7 +80,7 @@ const ShippingScreen = () => {
             <Form.Group controlId='phoneNumber' className='my-2'>
                 <Form.Label>Phone Number</Form.Label>
                 <Form.Control
-                    type='number'
+                    type='string'
                     placeholder='Enter phone number'
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}>

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { CartContext } from '../context/CartContext';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import Message from '../components/Message';
@@ -10,7 +11,10 @@ const OrderScreen = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('')
     const [order, setOrder] = useState('')
-
+    const [checkout_url, setCheckout_Url] = useState('');
+    const {paymentStatus, setPaymentStatus, checkoutSessionId, setCheckoutSessionId} = useContext(CartContext);
+    const [paidData, setPaidData] = useState(false);
+    
     // Set the default Axios configuration to include credentials
 axios.defaults.withCredentials = true;
 
@@ -24,8 +28,100 @@ axios.defaults.withCredentials = true;
         })
     }, [id])
 
+    const payNowHandler = () => {
+        const addTwoZeros = (amount) => {
+            return parseInt(`${amount}00`);
+        }
+        const lineItems = order.orderItems.map((item) => ({
+            currency: "PHP",
+            amount: addTwoZeros(item.price),
+            name: item.name,
+            quantity: item.quantity,
+            images: item.image,
+        }))
+        const paymentMethodsArray = order.paymentMethod.map((orders) => orders.toLowerCase());
+        const requestBody = {
+            attributes: {
+                billing: {
+                    name: order.user.username, 
+                    email: order.user.email, 
+                    phone: order.shippingInfo.phoneNumber,
+                    address: {
+                        city: order.shippingInfo.city,
+                        country: order.shippingInfo.country.toUpperCase(),
+                        line1: order.shippingInfo.address,
+                        postal_code: order.shippingInfo.zipCode
+                    }
+                },
+                // cancel_url: `${import.meta.env.VITE_API_URL}/api/v1/orders/${id}`,
+                // success_url: `${import.meta.env.VITE_API_URL}/api/v1/orders/${id}`,
+                reference_number: `${id}`,
+                payment_method_types: paymentMethodsArray,
+                show_description: false,
+                customer_email: order.user.email,
+                line_items: lineItems
+            },
+        };
 
-  return (
+    axios.post(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession`, requestBody).then(response => {
+            console.log(response)
+            setCheckout_Url(response.data.data.attributes.checkout_url)
+            setPaymentStatus(response.data.data.attributes.payment_intent.attributes.status)
+            setCheckoutSessionId(response.data.data.id)
+            console.log(response.data.data.attributes.payment_intent.attributes.status)
+            console.log(response.data.data.id)
+        }).catch(error => {
+            console.log(error.response.data)
+        })
+    };
+
+    useEffect(() => {
+        localStorage.setItem("checkoutSessionId", JSON.stringify(checkoutSessionId));
+        localStorage.setItem("paymentStatus", JSON.stringify(paymentStatus));
+    }, [checkoutSessionId, paymentStatus])
+
+    useEffect(() => {
+        if (checkout_url) {
+            // Open the checkout URL in a new window
+            window.open(checkout_url, '_blank');
+        }
+    },[checkout_url])
+
+    useEffect(() => {
+        if(checkoutSessionId){
+            const fetchAndUpdateStatus = () => {
+                axios.get(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession/${checkoutSessionId}`).then(response => {
+                    console.log(response)
+                    setPaymentStatus(response.data.data.attributes.payment_intent.attributes.status)
+                    setIsLoading(false)
+                    if (response.data.data.attributes.payment_intent.attributes.status === 'succeeded') {
+                        clearInterval(intervalId);
+                    }
+                }).catch(error => {
+                    console.log(error.response)
+                })
+            }
+            const intervalId = setInterval(fetchAndUpdateStatus, 5000);
+        
+              // Clear the interval when the component unmounts
+            return () => {
+                clearInterval(intervalId);
+            };
+        }
+    }, [order, checkoutSessionId]);
+
+    useEffect(() => {
+        if(paymentStatus === 'succeeded'){
+            axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/pay`).then(response => {
+                console.log('res:', response)
+                setPaidData(response.data)
+            })
+        } 
+    },[id, paymentStatus])
+
+console.log(paymentStatus)
+
+return (
     isLoading ? <Loading /> : error ? <Message variant='danger'>{error}</Message> : (
         <>
             <h1>Order: {order._id}</h1>
@@ -38,7 +134,7 @@ axios.defaults.withCredentials = true;
                             <p><strong>Email: </strong> {order.user.email}</p>
                             <p><strong>Address: </strong> {order.shippingInfo.address},{' '}{order.shippingInfo.city}{' City '}{order.shippingInfo.zipCode}{' '}{order.shippingInfo.country}</p>
                             <p><strong>Phone Number</strong> {order.shippingInfo.phoneNumber}</p>
-                            {order.isDelivered ? (
+                            {paidData.isDelivered ? (
                                 <Message variant='success'>
                                     Delivered on {order.deliveredAt}
                                 </Message>
@@ -54,9 +150,9 @@ axios.defaults.withCredentials = true;
                                 <strong>Method: </strong>
                                 {order.paymentMethod}
                             </p>
-                            {order.isPaid ? (
+                            {paidData.isPaid ? (
                                 <Message variant='success'>
-                                    Paid on {order.paidAt}
+                                    Paid on {paidData.paidAt}
                                 </Message>
                             ) : (
                                 <Message variant='danger'>
@@ -98,7 +194,23 @@ axios.defaults.withCredentials = true;
                                     <Col>₱{order.totalPrice}</Col>
                                 </Row>
                             </ListGroup.Item>
-                            {/* PAY ORDER PLACEHOLDER */}
+                            {!paidData.isPaid && (
+                                <ListGroup.Item>
+                                    {isLoading && <Loading />}
+                                {isLoading ? <Loading/> : (
+                                    <Button
+                                        type='button'
+                                        className='btn-block'
+                                        variant='warning'
+                                        onClick={ payNowHandler }
+                                        >
+                                            Pay Now
+                                    </Button>
+                                )}    
+                                
+                            </ListGroup.Item>
+                            )}
+                            
                             {/* MARK AS DELIVERED PLACEHOLDER */}
                         </ListGroup>
                     </Card>

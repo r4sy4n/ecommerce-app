@@ -48,7 +48,7 @@ const PlaceOrderScreen = () => {
             isDelivered: false // You might want to adjust this
         };
     
-        axios.post(`${import.meta.env.VITE_API_URL}/api/v1/orders`, orderData).then((response) => {
+        axios.post(`${import.meta.env.VITE_API_URL}/api/v1/orders`, orderData, {withCredentials: true}).then((response) => {
                 clearCart();
                 setLoading(false);
                 toast.success(response.data.message);

@@ -18,13 +18,24 @@ const CartProvider = ({ children }) => {
   const [paymentMethod, setPaymentMethod] = useState(() => {
     // Initialize payment from localStorage
     const savedPaymentMethod = localStorage.getItem("paymentMethod");
-    return savedPaymentMethod ? JSON.parse(savedPaymentMethod) : '';
+    return savedPaymentMethod ? JSON.parse(savedPaymentMethod) : [];
   });
 
    // Calculate the total price based on the cart state
   const calculateTotalPrice = (cartItems) => {
     return cartItems.reduce((total, item) => total + (item.price * item.qty), 0);
   };
+
+  const [paymentStatus, setPaymentStatus] = useState(() => {
+    // Initialize cart state from localStorage
+    const status = localStorage.getItem("paymentStatus");
+    return status ? JSON.parse(status) : '';
+  });
+const [checkoutSessionId, setCheckoutSessionId] = useState(() => {
+    // Initialize cart state from localStorage
+    const sessionId = localStorage.getItem("checkoutSessionId");
+    return sessionId ? JSON.parse(sessionId) : '';
+  });
 
   useEffect(() => {
     // Calculate the total price whenever the cart changes
@@ -43,10 +54,11 @@ const CartProvider = ({ children }) => {
   };
   const savePaymentMethod = (payment) => {
     // Update the state with the new payment method
-    setPaymentMethod(payment);
-
-    // Update localStorage with the new payment method
-    localStorage.setItem("paymentMethod", JSON.stringify(payment));
+    const updatedPaymentMethods = [payment];
+    setPaymentMethod(updatedPaymentMethods);
+  
+    // Save the updated payment methods to localStorage
+    localStorage.setItem("paymentMethod", JSON.stringify(updatedPaymentMethods));
   };
 
   const addToCart = (itemToAdd) => {
@@ -91,6 +103,10 @@ const CartProvider = ({ children }) => {
         cart,
         totalCartPrice,
         shippingAddress,
+        paymentStatus, 
+        setPaymentStatus,
+        checkoutSessionId, 
+        setCheckoutSessionId,
         saveShippingAddress,
         paymentMethod,
         savePaymentMethod,

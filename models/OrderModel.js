@@ -17,7 +17,7 @@ const OrderSchema = mongoose.Schema({
                 required: true
             },
             image: {
-                type: String,
+                type: Array,
                 required: true
             },
             price: {
@@ -54,7 +54,7 @@ const OrderSchema = mongoose.Schema({
         }
     },
     paymentMethod: {
-        type: String,
+        type: Array,
         required: true
     },
     paymentResult: {
