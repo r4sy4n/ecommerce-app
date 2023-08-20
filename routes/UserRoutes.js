@@ -24,23 +24,22 @@ router.put('/profile', verify, (request, response) => {
     User.findByIdAndUpdate(request.user._id, request.body, { new: true }).then((updatedUser) => {
         if (request.body.password) {
           bcrypt.hash(request.body.password, 10).then((hash, err) => {
-              updatedUser.password = hash; // Set the hashed password in the updatedUser object
-              return updatedUser.save(); // Save the updated user with the new hashed password
-            }).then((savedUser) => {
-              response.status( 200 ).send({
-                updatedUser: savedUser,
-                message: 'Changes Saved'
-              });
-            }).catch((error) => {
-              response.status( 500 ).send({ error: 'Internal Server Error' });
+            updatedUser.password = hash; // Set the hashed password in the updatedUser object
+            return updatedUser.save(); // Save the updated user with the new hashed password
+            })
+          } else {
+            return updatedUser.save();
+          }
+        }).then((savedUser) => {
+            response.status( 200 ).send({
+              savedUser: savedUser,
+              message: 'Changes Saved'
             });
-        } else {
-          response.status( 200 ).send({ user: updatedUser, message: 'Changes Saved' });
-        }
-      }).catch((error) => {
-        response.status(404).send({ error: error.message });
-      });
-  });
+          }).catch((error) => {
+            response.status( 500 ).send({ error, error: 'Internal Server Error' });
+          });
+          
+    });
 
 
 module.exports = router;

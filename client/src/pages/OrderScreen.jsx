@@ -5,6 +5,7 @@ import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const OrderScreen = () => {
     const { id } = useParams();
@@ -96,6 +97,7 @@ axios.defaults.withCredentials = true;
                     setIsLoading(false)
                     if (response.data.data.attributes.payment_intent.attributes.status === 'succeeded') {
                         clearInterval(intervalId);
+                        toast.success('Payment Successful')
                     }
                 }).catch(error => {
                     console.log(error.response)
