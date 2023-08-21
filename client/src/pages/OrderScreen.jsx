@@ -154,7 +154,7 @@ return (
                             </p>
                             {paidData.isPaid ? (
                                 <Message variant='success'>
-                                    Paid on {paidData.paidAt}
+                                    Paid on {paidData.paidAt.substring(0, 10)}
                                 </Message>
                             ) : (
                                 <Message variant='danger'>

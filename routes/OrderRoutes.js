@@ -53,10 +53,11 @@ router.get('/:id', verify, ( request, response ) => {
 //PUT Endpoint to update order to paid
 router.put('/:id/pay', verify, ( request, response ) => {
     Order.findById( request.params.id ).then(order => {
+        console.log(order)
         if(order){
             order.isPaid = true;
             order.paidAt = Date.now();
-            order.PaymentResult = {
+            order.paymentResult = {
                 id: request.body.id,
                 status: request.body.status,
                 update_time: request.body.update_time,
