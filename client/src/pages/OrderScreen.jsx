@@ -17,6 +17,7 @@ const OrderScreen = () => {
     const [paymentCreated, setPaymentCreated] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState('awaiting_payment_method');
     const [paidData, setPaidData] = useState(false);
+    const [datePaid, setDatePaid] = useState('');
     
     // Set the default Axios configuration to include credentials
 axios.defaults.withCredentials = true;
@@ -68,7 +69,6 @@ axios.defaults.withCredentials = true;
                 line_items: lineItems
             },
         };
-        setIsLoading(true)
     axios.post(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession`, requestBody).then(response => {
             console.log(response)
             setCheckout_Url(response.data.data.attributes.checkout_url)
@@ -112,6 +112,7 @@ console.log(checkoutSessionId)
                     if (response.data.data.attributes.payment_intent.attributes.status === 'succeeded') {
                         clearInterval(intervalId);
                         toast.success('Payment Successful')
+                        setDatePaid(new Date(response.data.data.attributes.paid_at * 1000).toLocaleString())
                     }
                 }).catch(error => {
                     console.log(error.response)
@@ -128,12 +129,15 @@ console.log(checkoutSessionId)
 
     useEffect(() => {
         if(paymentStatus === 'succeeded'){
-            axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/pay`).then(response => {
+            const date = {
+                datePaid: datePaid,
+            };
+            axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/pay`, {date}).then(response => {
                 console.log('res:', response)
                 setPaidData(response.data)
             })
         } 
-    },[id, paymentStatus])
+    },[id, paymentStatus, datePaid])
 
 console.log(paymentStatus)
 
@@ -168,7 +172,7 @@ return (
                             </p>
                             {paidData.isPaid ? (
                                 <Message variant='success'>
-                                    Paid on {paidData.paidAt.substring(0, 10)}
+                                    Paid on {paidData.paymentResult.datePaid.date.datePaid}
                                 </Message>
                             ) : (
                                 <Message variant='danger'>
@@ -219,6 +223,7 @@ return (
                                         className='btn-block'
                                         variant='warning'
                                         onClick={ payNowHandler }
+                                        disabled={paymentCreated === true}
                                         >
                                             Pay Now
                                     </Button>

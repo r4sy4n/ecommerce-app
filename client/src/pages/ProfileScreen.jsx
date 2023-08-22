@@ -125,11 +125,11 @@ const ProfileScreen = () => {
                         {myOrders.map((order) => (
                             <tr key={order._id}>
                                 <td>{order._id}</td>
-                                <td>{order.createdAt.substring(0, 10)}</td>
+                                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                                 <td>₱{order.totalPrice}</td>
                                 <td>
                                     {order.isPaid ? (
-                                        order.paidAt.substring(0, 10)
+                                        <span>{new Date(order.paymentResult.datePaid.date.datePaid).toLocaleDateString()}</span>
                                     ) : (
                                         <FaTimes style={{ color: 'red' }}/>
                                     )}

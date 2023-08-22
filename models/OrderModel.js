@@ -73,6 +73,9 @@ const OrderSchema = mongoose.Schema({
         created: {
             type: Boolean,
             default: false
+        },
+        datePaid: {
+            type: Object
         }
     },
     itemsPrice: {

@@ -20,7 +20,7 @@ router.post('/', verify, ( request, response ) => {
             orderItems: orderItems.map((order) => ({
                 ...order, _id: undefined,
             })),
-            paymentResult: {id: ''},
+            paymentResult: {id: '', datePaid: ''},
             user: request.user._id,
             shippingInfo,
             itemsPrice,
@@ -58,6 +58,7 @@ router.put('/:id/pay', verify, ( request, response ) => {
         if(order){
             order.isPaid = true;
             order.paidAt = Date.now();
+            order.paymentResult.datePaid = request.body;
             order.save();
             response.status( 200 ).send( order )
         }
