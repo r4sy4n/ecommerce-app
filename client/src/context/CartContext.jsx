@@ -26,11 +26,6 @@ const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => total + (item.price * item.qty), 0);
   };
 
-  const [paymentStatus, setPaymentStatus] = useState(() => {
-    // Initialize cart state from localStorage
-    const status = localStorage.getItem("paymentStatus");
-    return status ? JSON.parse(status) : '';
-  });
 const [checkoutSessionId, setCheckoutSessionId] = useState(() => {
     // Initialize cart state from localStorage
     const sessionId = localStorage.getItem("checkoutSessionId");
@@ -103,8 +98,6 @@ const [checkoutSessionId, setCheckoutSessionId] = useState(() => {
         cart,
         totalCartPrice,
         shippingAddress,
-        paymentStatus, 
-        setPaymentStatus,
         checkoutSessionId, 
         setCheckoutSessionId,
         saveShippingAddress,

@@ -18,8 +18,9 @@ router.post('/', verify, ( request, response ) => {
     }else{
         const newOrder = new Order ({
             orderItems: orderItems.map((order) => ({
-                ...order, _id: undefined
+                ...order, _id: undefined,
             })),
+            paymentResult: {id: ''},
             user: request.user._id,
             shippingInfo,
             itemsPrice,
@@ -53,16 +54,10 @@ router.get('/:id', verify, ( request, response ) => {
 //PUT Endpoint to update order to paid
 router.put('/:id/pay', verify, ( request, response ) => {
     Order.findById( request.params.id ).then(order => {
-        console.log(order)
+        console.log('order:', order)
         if(order){
             order.isPaid = true;
             order.paidAt = Date.now();
-            order.paymentResult = {
-                id: request.body.id,
-                status: request.body.status,
-                update_time: request.body.update_time,
-                email_address: request.body.email_address
-            }
             order.save();
             response.status( 200 ).send( order )
         }
@@ -71,6 +66,32 @@ router.put('/:id/pay', verify, ( request, response ) => {
         response.status( 404 ).send( error )
     })
 })
+
+//PUT Endpoint to update checkoutSession Id from paymongo
+router.put('/:id/saveCheckoutSession', verify, (request, response) => {
+    const orderId = request.params.id;
+    const { checkoutSessionId } = request.body;
+
+    Order.findById(orderId).then(order => {
+        if (order) {
+            console.log(order)
+            order.paymentResult.id = checkoutSessionId;
+            order.paymentResult.created = true;
+            console.log("checkoutSessionId:", checkoutSessionId)
+            order.save().then(savedOrder => {
+                response.status( 200 ).send({ savedOrder, message: 'Checkout session ID saved successfully' });
+            }).catch(error => {
+                console.log(error);
+                response.status( 500 ).send({ error: 'An error occurred while saving checkout session ID' });
+            });
+        } else {
+            response.status( 404 ).send({ error: 'Order not found' });
+        }
+    }).catch(error => {
+        console.log(error);
+        response.status( 500 ).send({ error: 'An error occurred' });
+    });
+});
 
 //PUT Endpoint to update order to delivered
 router.put('/:id/deliver', verify, restrict, ( request, response ) => {

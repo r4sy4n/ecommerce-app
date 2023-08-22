@@ -13,7 +13,9 @@ const OrderScreen = () => {
     const [error, setError] = useState('')
     const [order, setOrder] = useState('')
     const [checkout_url, setCheckout_Url] = useState('');
-    const {paymentStatus, setPaymentStatus, checkoutSessionId, setCheckoutSessionId} = useContext(CartContext);
+    const [checkoutSessionId, setCheckoutSessionId] = useState('');
+    const [paymentCreated, setPaymentCreated] = useState(false);
+    const [paymentStatus, setPaymentStatus] = useState('awaiting_payment_method');
     const [paidData, setPaidData] = useState(false);
     
     // Set the default Axios configuration to include credentials
@@ -23,7 +25,10 @@ axios.defaults.withCredentials = true;
         axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}`).then(response => {
             console.log(response.data.orders)
             setOrder(response.data.orders)
-            setIsLoading(false)
+            setPaymentCreated(response.data.orders.paymentResult.created);
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 3000);
         }).catch(error => {
             setError(error)
         })
@@ -63,23 +68,31 @@ axios.defaults.withCredentials = true;
                 line_items: lineItems
             },
         };
-
+        setIsLoading(true)
     axios.post(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession`, requestBody).then(response => {
             console.log(response)
             setCheckout_Url(response.data.data.attributes.checkout_url)
             setPaymentStatus(response.data.data.attributes.payment_intent.attributes.status)
-            setCheckoutSessionId(response.data.data.id)
-            console.log(response.data.data.attributes.payment_intent.attributes.status)
-            console.log(response.data.data.id)
+            setIsLoading(false)
+            const checkoutSessionId = response.data.data.id;
+
+            // Send the checkout session ID to the server to save in the database
+            axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/saveCheckoutSession`, {
+                checkoutSessionId: checkoutSessionId
+            }).then(savedResponse => {
+                console.log('Checkout session ID saved:', savedResponse);
+                setOrder(savedResponse.data.savedOrder)
+                setPaymentCreated(savedResponse.data.savedOrder.paymentResult.created)
+                setIsLoading(false)
+            }).catch(error => {
+                console.log('Error saving checkout session ID:', error);
+            });
         }).catch(error => {
             console.log(error.response.data)
         })
     };
-
-    useEffect(() => {
-        localStorage.setItem("checkoutSessionId", JSON.stringify(checkoutSessionId));
-        localStorage.setItem("paymentStatus", JSON.stringify(paymentStatus));
-    }, [checkoutSessionId, paymentStatus])
+console.log(paymentCreated)
+console.log(checkoutSessionId)
 
     useEffect(() => {
         if (checkout_url) {
@@ -89,7 +102,8 @@ axios.defaults.withCredentials = true;
     },[checkout_url])
 
     useEffect(() => {
-        if(checkoutSessionId){
+        if(paymentCreated){
+            setCheckoutSessionId(order.paymentResult.id)
             const fetchAndUpdateStatus = () => {
                 axios.get(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession/${checkoutSessionId}`).then(response => {
                     console.log(response)
@@ -103,14 +117,14 @@ axios.defaults.withCredentials = true;
                     console.log(error.response)
                 })
             }
-            const intervalId = setInterval(fetchAndUpdateStatus, 5000);
+            const intervalId = setInterval(fetchAndUpdateStatus, 3000);
         
               // Clear the interval when the component unmounts
             return () => {
                 clearInterval(intervalId);
             };
         }
-    }, [order, checkoutSessionId]);
+    }, [checkoutSessionId, paymentCreated]);
 
     useEffect(() => {
         if(paymentStatus === 'succeeded'){

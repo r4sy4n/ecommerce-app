@@ -69,6 +69,10 @@ const OrderSchema = mongoose.Schema({
         },
         email_address: {
             type: String
+        },
+        created: {
+            type: Boolean,
+            default: false
         }
     },
     itemsPrice: {

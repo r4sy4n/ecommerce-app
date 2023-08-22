@@ -45,7 +45,7 @@ const PlaceOrderScreen = () => {
             // shippingPrice: 0, // You might want to adjust this
             totalPrice: totalCartPrice, // You might want to adjust this
             isPaid: false, // You might want to adjust this
-            isDelivered: false // You might want to adjust this
+            isDelivered: false, // You might want to adjust this
         };
     
         axios.post(`${import.meta.env.VITE_API_URL}/api/v1/orders`, orderData, {withCredentials: true}).then((response) => {
