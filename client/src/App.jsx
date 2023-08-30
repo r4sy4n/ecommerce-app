@@ -8,6 +8,7 @@ import {
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoutes from './components/PrivateRoutes';
+import AdminRoutes from './components/AdminRoutes';
 import HomeScreen from './pages/HomeScreen';
 import ProductScreen from './pages/ProductScreen';
 import CartScreen from './pages/CartScreen';
@@ -18,6 +19,7 @@ import PaymentScreen from './pages/PaymentScreen';
 import PlaceOrderScreen from './pages/PlaceOrderScreen';
 import OrderScreen from './pages/OrderScreen';
 import ProfileScreen from './pages/ProfileScreen';
+import OrderListScreen from './pages/OrderListScreen';
 
 const App = () => {
   return (
@@ -36,6 +38,10 @@ const App = () => {
               <Route path='/placeorder' element={<PlaceOrderScreen />} />
               <Route path='/orders/:id' element={<OrderScreen />} />
               <Route path='/profile' element={<ProfileScreen />} />
+            </Route>
+            
+            <Route path='' element={<AdminRoutes />}>
+              <Route path='/admin/orderlist' element={<OrderListScreen />} />
             </Route>
           </Route>
         </Routes>

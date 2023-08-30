@@ -2,11 +2,11 @@ import { Outlet, Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
 
-const PrivateRoutes = () => {
+const AdminRoutes = () => {
     const { userInfo } = useContext(UserContext);
   return (
-      userInfo ? <Outlet /> : <Navigate to='/login' replace />
+      userInfo && userInfo.isAdmin ? <Outlet /> : <Navigate to='/login' replace />
   )
 };
 
-export default PrivateRoutes;
+export default AdminRoutes;
