@@ -1,7 +1,6 @@
-import { useEffect, useState, useContext } from 'react';
-import { CartContext } from '../context/CartContext';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
+import { Row, Col, ListGroup, Image, Button, Card } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loading from '../components/Loading';
 import axios from 'axios';

@@ -103,7 +103,7 @@ router.put('/:id/deliver', verify, restrict, ( request, response ) => {
 
 //GET Endpoint to get all orders
 router.get('/', verify, restrict, ( request, response ) => {
-    Order.find().then(order => {
+    Order.find().populate('user', 'id username').then(order => {
         response.status( 200 ).send({ orders: order, count: order.length })
     })
 })
