@@ -54,7 +54,6 @@ router.get('/:id', verify, ( request, response ) => {
 //PUT Endpoint to update order to paid
 router.put('/:id/pay', verify, ( request, response ) => {
     Order.findById( request.params.id ).then(order => {
-        console.log('order:', order)
         if(order){
             order.isPaid = true;
             order.paidAt = Date.now();
@@ -75,10 +74,8 @@ router.put('/:id/saveCheckoutSession', verify, (request, response) => {
 
     Order.findById(orderId).then(order => {
         if (order) {
-            console.log(order)
             order.paymentResult.id = checkoutSessionId;
             order.paymentResult.created = true;
-            console.log("checkoutSessionId:", checkoutSessionId)
             order.save().then(savedOrder => {
                 response.status( 200 ).send({ savedOrder, message: 'Checkout session ID saved successfully' });
             }).catch(error => {
@@ -96,8 +93,17 @@ router.put('/:id/saveCheckoutSession', verify, (request, response) => {
 
 //PUT Endpoint to update order to delivered
 router.put('/:id/deliver', verify, restrict, ( request, response ) => {
-    Order.findOne( request.params.id ).then(order => {
-        response.status( 200 ).send({ orders: order, count: order.length })
+    Order.findById( request.params.id ).then(order => {
+        console.log('order:', order)
+        if(order){
+            order.isDelivered = true;
+            order.deliveredAt = Date.now();
+            order.save();
+            response.status( 200 ).send( order )
+        }
+    }).catch(error => {
+        console.log(error)
+        response.status( 404 ).send( error )
     })
 })
 

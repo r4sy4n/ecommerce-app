@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Button, Card } from 'react-bootstrap';
 import Message from '../components/Message';
@@ -17,6 +18,10 @@ const OrderScreen = () => {
     const [paymentStatus, setPaymentStatus] = useState('awaiting_payment_method');
     const [paidData, setPaidData] = useState(false);
     const [datePaid, setDatePaid] = useState('');
+    const { userInfo } = useContext(UserContext);
+    const [delivered, setDelivered] = useState('');
+    const [deliveredAt, setDeliveredAt] = useState('');
+
     
     // Set the default Axios configuration to include credentials
 axios.defaults.withCredentials = true;
@@ -74,7 +79,10 @@ axios.defaults.withCredentials = true;
             setPaymentStatus(response.data.data.attributes.payment_intent.attributes.status)
             setIsLoading(false)
             const checkoutSessionId = response.data.data.id;
-
+            if (checkout_url) {
+                // Open the checkout URL in a new window
+                window.open(checkout_url, '_blank');
+            }
             // Send the checkout session ID to the server to save in the database
             axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/saveCheckoutSession`, {
                 checkoutSessionId: checkoutSessionId
@@ -93,37 +101,38 @@ axios.defaults.withCredentials = true;
 console.log(paymentCreated)
 console.log(checkoutSessionId)
 
-    useEffect(() => {
-        if (checkout_url) {
-            // Open the checkout URL in a new window
-            window.open(checkout_url, '_blank');
-        }
-    },[checkout_url])
+// useEffect(() => {
+//     if (checkout_url) {
+//         // Open the checkout URL in a new window
+//         window.open(checkout_url, '_blank');
+//     }
+// },[checkout_url])
 
-    useEffect(() => {
-        if(paymentCreated){
-            setCheckoutSessionId(order.paymentResult.id)
-            const fetchAndUpdateStatus = () => {
-                axios.get(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession/${checkoutSessionId}`).then(response => {
-                    console.log(response)
-                    setPaymentStatus(response.data.data.attributes.payment_intent.attributes.status)
-                    setIsLoading(false)
-                    if (response.data.data.attributes.payment_intent.attributes.status === 'succeeded') {
-                        clearInterval(intervalId);
-                        toast.success('Payment Successful')
-                        setDatePaid(new Date(response.data.data.attributes.paid_at * 1000).toLocaleString())
-                    }
-                }).catch(error => {
-                    console.log(error.response)
-                })
-            }
-            const intervalId = setInterval(fetchAndUpdateStatus, 3000);
-        
-              // Clear the interval when the component unmounts
-            return () => {
-                clearInterval(intervalId);
-            };
+useEffect(() => {
+    if(paymentCreated){
+        setCheckoutSessionId(order.paymentResult.id)
+        const fetchAndUpdateStatus = () => {
+            axios.get(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession/${checkoutSessionId}`).then(response => {
+                console.log(response)
+                setPaymentStatus(response.data.data.attributes.payment_intent.attributes.status)
+                setCheckout_Url(response.data.data.attributes.checkout_url)
+                setIsLoading(false)
+                if (response.data.data.attributes.payment_intent.attributes.status === 'succeeded') {
+                    clearInterval(intervalId);
+                    toast.success('Payment Successful')
+                    setDatePaid(new Date(response.data.data.attributes.paid_at * 1000).toLocaleString())
+                }
+            }).catch(error => {
+                console.log(error.response)
+            })
         }
+        const intervalId = setInterval(fetchAndUpdateStatus, 3000);
+        
+        // Clear the interval when the component unmounts
+        return () => {
+            clearInterval(intervalId);
+        };
+    }
     }, [checkoutSessionId, paymentCreated]);
 
     useEffect(() => {
@@ -134,13 +143,34 @@ console.log(checkoutSessionId)
             axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/pay`, {date}).then(response => {
                 console.log('res:', response)
                 setPaidData(response.data)
+                setDelivered(response.data.isDelivered)
+                setDeliveredAt(response.data.deliveredAt)
+            }).catch(error => {
+                console.log(error.response)
             })
         } 
     },[id, paymentStatus, datePaid])
+    
+    const deliverOrderHandler = () => {
+        axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/deliver`).then(response => {
+            console.log('delivered: res', response)
+            setDelivered(response.data.isDelivered)
+            setDeliveredAt(response.data.deliveredAt)
+        }).catch(error => {
+            console.log(error.response)
+        })
+    }
 
-console.log(paymentStatus)
-
-return (
+    const checkoutHandler = () => {
+        if (checkout_url) {
+            window.open(checkout_url, '_blank');
+        } else {
+            // Handle the case where checkout_url is empty or invalid
+            console.log("Invalid checkout URL");
+        }
+    };
+    
+    return (
     isLoading ? <Loading /> : error ? <Message variant='danger'>{error}</Message> : (
         <>
             <h1>Order: {order._id}</h1>
@@ -153,9 +183,9 @@ return (
                             <p><strong>Email: </strong> {order.user.email}</p>
                             <p><strong>Address: </strong> {order.shippingInfo.address},{' '}{order.shippingInfo.city}{' City '}{order.shippingInfo.zipCode}{' '}{order.shippingInfo.country}</p>
                             <p><strong>Phone Number</strong> {order.shippingInfo.phoneNumber}</p>
-                            {paidData.isDelivered ? (
+                            {delivered ? (
                                 <Message variant='success'>
-                                    Delivered on {order.deliveredAt}
+                                    Delivered on {new Date(deliveredAt).toLocaleString()}
                                 </Message>
                             ) : (
                                 <Message variant='danger'>
@@ -217,7 +247,7 @@ return (
                                 <ListGroup.Item>
                                     {isLoading && <Loading />}
                                 {isLoading ? <Loading/> : (
-                                    <Button
+                                    (userInfo.username === order.user.username) ? (<Button
                                         type='button'
                                         className='btn-block'
                                         variant='warning'
@@ -225,13 +255,37 @@ return (
                                         disabled={paymentCreated === true}
                                         >
                                             Pay Now
-                                    </Button>
+                                    </Button>) : (
+                                        <Message variant='danger'>
+                                        Not Yet Paid By {order.user.username}
+                                    </Message>
+                                    ) 
                                 )}    
-                                
                             </ListGroup.Item>
                             )}
+                            {isLoading ? <Loading /> : (
+                                paymentCreated && !paidData.isPaid && (
+                                    <ListGroup.Item>
+                                        <Button 
+                                            type='button' 
+                                            className='btn btn-block' 
+                                            variant='success' 
+                                            onClick={checkoutHandler}>
+                                            Pay Via Paymongo
+                                        </Button>
+                                    </ListGroup.Item>
+                                )
+                            )}
+                            {isLoading ? <Loading /> : (
+                                userInfo && userInfo.isAdmin && paidData.isPaid && !delivered && (
+                                    <ListGroup.Item>
+                                        <Button type='button' className='btn btn-block' variant='warning' onClick={deliverOrderHandler}>
+                                            Mark As Delivered
+                                        </Button>
+                                    </ListGroup.Item>
+                                )
+                            )}                    
                             
-                            {/* MARK AS DELIVERED PLACEHOLDER */}
                         </ListGroup>
                     </Card>
                 </Col>
