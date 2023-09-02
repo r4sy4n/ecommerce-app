@@ -18,16 +18,16 @@ const ProductSchema = mongoose.Schema({
     },
     category: {
         type: String,
-        required: [true, 'Please select category for this product'],
-        enum: {
-            values: [
-                'Beauty',
-                'Wellness',
-                'Nutrition',
-                'Beverage'
-            ],
-            message: 'Please select correct category for this product'
-        }
+        // required: [true, 'Please select category for this product'],
+        // enum: {
+        //     values: [
+        //         'Beauty',
+        //         'Wellness',
+        //         'Nutrition',
+        //         'Beverage'
+        //     ],
+        //     message: 'Please select correct category for this product'
+        // },
     }, 
     description: {
         type: String,

@@ -4,6 +4,7 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const ProductListScreen = () => {
     const [products, setProducts] = useState([]);
@@ -22,7 +23,20 @@ const ProductListScreen = () => {
 
     const deleteHandler = (id) => {
       console.log('delete:', id)
-    }
+    };
+    // Set the default Axios configuration to include credentials
+    axios.defaults.withCredentials = true;
+
+    const createProductHandler = () => {
+      if(window.confirm('Create new product?')){
+        axios.post(`${import.meta.env.VITE_API_URL}/api/v1/products`).then(response => {
+          setProducts((existingProducts) => [...existingProducts, response.data.dbResponse]);
+          toast.success(response.data.message)
+        }).catch(error => {
+          console.log(error)
+        })
+      }
+    };
 
     return (
       <>
@@ -31,7 +45,7 @@ const ProductListScreen = () => {
             <h1>Products</h1>
           </Col>
           <Col className='text-end'>
-            <Button className='btn-sm m-3'>
+            <Button className='btn-sm m-3' onClick={ createProductHandler }>
               <FaEdit /> Create Product
             </Button>
           </Col>
