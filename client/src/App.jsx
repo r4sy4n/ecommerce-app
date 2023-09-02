@@ -20,6 +20,7 @@ import PlaceOrderScreen from './pages/PlaceOrderScreen';
 import OrderScreen from './pages/OrderScreen';
 import ProfileScreen from './pages/ProfileScreen';
 import OrderListScreen from './pages/OrderListScreen';
+import ProductListScreen from './pages/ProductListScreen';
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
             
             <Route path='' element={<AdminRoutes />}>
               <Route path='/admin/orderlist' element={<OrderListScreen />} />
+              <Route path='/admin/productlist' element={<ProductListScreen />} />
             </Route>
           </Route>
         </Routes>

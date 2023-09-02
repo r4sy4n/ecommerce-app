@@ -13,6 +13,9 @@ const OrderListScreen = () => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders`, {withCredentials: true} ).then(response => {
       setOrders(response.data.orders)
       setIsLoading(false)
+    }).catch((error) => {
+      console.log(error)
+      setIsLoading(false)
     })
   },[])
 
