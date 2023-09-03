@@ -30,7 +30,7 @@ router.post('/', verify, restrict, ( request, response ) => {
             productName: 'Sample name',
             price: 0,
             user: request.user._id,
-            image: '../client/src/assets/images/sample.png',
+            images: '../client/src/assets/images/sample.png',
             category: 'Sample category',
             stock: 0,
             description: 'Sample description'
@@ -45,7 +45,7 @@ router.put('/:id', verify, restrict, ( request, response ) => {
     const { 
         productName,
         price,
-        image,
+        images,
         category,
         stock,
         description
@@ -54,7 +54,7 @@ router.put('/:id', verify, restrict, ( request, response ) => {
         if (product){
             product.productName = productName;
             product.price = price;
-            product.image = image;
+            product.images = images;
             product.category = category;
             product.stock = stock;
             product.description = description;

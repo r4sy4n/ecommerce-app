@@ -10,7 +10,7 @@ const ProductEditScreen = () => {
   const { id } = useParams();
   const [productName, setProductName] = useState('');
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState('');
+  const [images, setImages] = useState('');
   const [category, setCategory] = useState('');
   const [stock, setStock] = useState(0);
   const [description, setDescription] = useState('');
@@ -23,9 +23,9 @@ const ProductEditScreen = () => {
       console.log(response)
       setProductName(response.data.products.productName)
       setPrice(response.data.products.price)
-      setImage(response.data.products.images)
+      setImages(response.data.products.images)
       setCategory(response.data.products.category)
-      setStock(response.data.products.price)
+      setStock(response.data.products.stock)
       setDescription(response.data.products.description)
       setLoading(false)
     }).catch(error => {
@@ -35,7 +35,8 @@ const ProductEditScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    axios.put(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`, { productName, price, image, category, stock, description }, {withCredentials: true}).then( response => {
+    axios.put(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`, { productName, price, images, category, stock, description }, {withCredentials: true}).then( response => {
+      console.log(response)
       navigate('/admin/productlist')
       toast.success('Product updated')
     })
@@ -72,7 +73,16 @@ const ProductEditScreen = () => {
               </Form.Control>
             </Form.Group>
 
-          {/* {IMAGE INPUT} */}
+            <Form.Group controlId='images' className='my-2'>
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter image link'
+                value={images}
+                onChange={(e) => setImages(e.target.value)}
+                >
+              </Form.Control>
+            </Form.Group>
 
           <Form.Group controlId='category' className='my-2'>
               <Form.Label>Category</Form.Label>
