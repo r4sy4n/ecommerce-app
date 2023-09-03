@@ -31,10 +31,8 @@ router.post('/', verify, restrict, ( request, response ) => {
             price: 0,
             user: request.user._id,
             image: '../client/src/assets/images/sample.png',
-            ratings: 0,
             category: 'Sample category',
             stock: 0,
-            numOfReviews: 0,
             description: 'Sample description'
         })
         newProduct.save().then(dbResponse => {
@@ -66,6 +64,6 @@ router.put('/:id', verify, restrict, ( request, response ) => {
             response.status( 404 ).send({ error: 'Product not found' });
         }
     })
-})
+});
 
 module.exports = router;
