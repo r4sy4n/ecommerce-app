@@ -24,6 +24,7 @@ router.get('/:id', ( request, response ) => {
     });
 });
 
+//POST Endpoint to create product
 router.post('/', verify, restrict, ( request, response ) => {
         const newProduct = new Product ({
             productName: 'Sample name',
@@ -39,6 +40,32 @@ router.post('/', verify, restrict, ( request, response ) => {
         newProduct.save().then(dbResponse => {
             response.status( 201 ).send({ message: 'Product created successfully!', dbResponse})
         })
+});
+
+//PUT Endpoint to edit specific product
+router.put('/:id', verify, restrict, ( request, response ) => {
+    const { 
+        productName,
+        price,
+        image,
+        category,
+        stock,
+        description
+    } = request.body
+    Product.findById(request.params.id).then(product => {
+        if (product){
+            product.productName = productName;
+            product.price = price;
+            product.image = image;
+            product.category = category;
+            product.stock = stock;
+            product.description = description;
+            product.save();
+            response.status( 200 ).send( product )
+        }else {
+            response.status( 404 ).send({ error: 'Product not found' });
+        }
+    })
 })
 
 module.exports = router;
