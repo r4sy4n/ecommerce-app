@@ -31,7 +31,7 @@ const ProductListScreen = () => {
           console.log(response)
           toast.success(response.data.message)
           const updatedProducts = products.filter((product) => product._id !== id);
-          setProducts(updatedProducts); // Update your products state here
+          setProducts(updatedProducts); // Update products state here
           setIsLoading(false)
         }).catch(error => {
           console.log(error)

@@ -8,6 +8,8 @@ const restrict = require('../middlewares/admin');
 router.get('/', ( request, response) => {
     Product.find().then( product => {
         response.status( 200 ).send({ count: product.length, products: product })
+    }).catch( error => {
+        response.status( 404 ).send({ error: error });
     });
 })
 
@@ -19,8 +21,8 @@ router.get('/:id', ( request, response ) => {
         }else{
             response.status( 404 ).send({ error: 'Product not found' });
         };
-    }).catch( (e) => {
-            response.status( 404 ).send({ error: e.message });
+    }).catch( error => {
+            response.status( 404 ).send({ error: error });
     });
 });
 
@@ -37,7 +39,9 @@ router.post('/', verify, restrict, ( request, response ) => {
         })
         newProduct.save().then(dbResponse => {
             response.status( 201 ).send({ message: 'Product created successfully!', dbResponse})
-        })
+        }).catch( error => {
+            response.status( 404 ).send({ error: error });
+        });
 });
 
 //PUT Endpoint to edit specific product
@@ -63,7 +67,9 @@ router.put('/:id', verify, restrict, ( request, response ) => {
         }else {
             response.status( 404 ).send({ error: 'Product not found' });
         }
-    })
+    }).catch( error => {
+        response.status( 404 ).send({ error: error });
+    });
 });
 
 //DELETE Endpoint to delete specific product
