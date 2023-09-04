@@ -30,7 +30,7 @@ router.post('/', verify, restrict, ( request, response ) => {
             productName: 'Sample name',
             price: 0,
             user: request.user._id,
-            images: '../client/src/assets/images/sample.png',
+            images: 'https://res.cloudinary.com/dbtjl6dcn/image/upload/v1693827017/sample_ygb18y.png',
             category: 'Sample category',
             stock: 0,
             description: 'Sample description'
@@ -65,5 +65,18 @@ router.put('/:id', verify, restrict, ( request, response ) => {
         }
     })
 });
+
+//DELETE Endpoint to delete specific product
+router.delete('/:id', verify, restrict, ( request, response ) => {
+    Product.findOneAndDelete({ _id: request.params.id }).then((deletedProduct) => {
+        if (deletedProduct) {
+            response.status( 200 ).send({ message: 'Product deleted successfully', deletedProduct });
+        }else {
+            response.status( 404 ).send({ message: 'Product not found' });
+        }
+    }).catch((error) => {
+        response.status( 500 ).send( error );
+    });
+})
 
 module.exports = router;

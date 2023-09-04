@@ -10,6 +10,9 @@ const ProductListScreen = () => {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Set the default Axios configuration to include credentials
+    axios.defaults.withCredentials = true;
+
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products`).then( response => {
           setProducts(response.data.products)
@@ -22,16 +25,27 @@ const ProductListScreen = () => {
       }, []);
 
     const deleteHandler = (id) => {
-      console.log('delete:', id)
+      setIsLoading(true)
+      if(window.confirm('Delete this product?')){
+        axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`).then(response => {
+          console.log(response)
+          toast.success(response.data.message)
+          const updatedProducts = products.filter((product) => product._id !== id);
+          setProducts(updatedProducts); // Update your products state here
+          setIsLoading(false)
+        }).catch(error => {
+          console.log(error)
+        })
+      }
     };
-    // Set the default Axios configuration to include credentials
-    axios.defaults.withCredentials = true;
 
     const createProductHandler = () => {
+      setIsLoading(true)
       if(window.confirm('Create new product?')){
         axios.post(`${import.meta.env.VITE_API_URL}/api/v1/products`).then(response => {
           setProducts((existingProducts) => [...existingProducts, response.data.dbResponse]);
           toast.success(response.data.message)
+          setIsLoading(false)
         }).catch(error => {
           console.log(error)
         })
