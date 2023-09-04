@@ -109,8 +109,13 @@ console.log(checkoutSessionId)
 // },[checkout_url])
 
 useEffect(() => {
-    if(paymentCreated){
-        setCheckoutSessionId(order.paymentResult.id)
+    if (paymentCreated) {
+      setCheckoutSessionId(order.paymentResult.id);
+    }
+  }, [order.paymentResult, paymentCreated]);
+
+useEffect(() => {
+    if(checkoutSessionId){
         const fetchAndUpdateStatus = () => {
             axios.get(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession/${checkoutSessionId}`).then(response => {
                 console.log(response)
@@ -133,7 +138,7 @@ useEffect(() => {
             clearInterval(intervalId);
         };
     }
-    }, [checkoutSessionId, paymentCreated]);
+    }, [checkoutSessionId]);
 
     useEffect(() => {
         if(paymentStatus === 'succeeded'){
