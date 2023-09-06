@@ -83,6 +83,37 @@ router.delete('/:id', verify, restrict, ( request, response ) => {
     }).catch((error) => {
         response.status( 500 ).send( error );
     });
-})
+});
+
+//POST Endpoint to create new reviews
+router.post('/:id/reviews', verify, ( request, response ) => {
+    const { rating, comment } = request.body
+    Product.findById({ _id: request.params.id }).then((product) => {
+        if(product){
+            const alreadyReviewed = product.reviews.find((review) => 
+            review.user.toString() === request.user._id.toString())
+            if(alreadyReviewed){
+                response.status( 400 ).send({ message: 'Product already reviewed' });
+                return
+            }
+            const review = {
+                name: request.user.username,
+                rating: Number(rating),
+                comment,
+                user: request.user._id,
+                createdAt: Date.now()
+            }
+            product.reviews.push(review)
+            product.numOfReviews =  product.reviews.length;
+            product.ratings = product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length;
+            product.save();
+            response.status( 201 ).send({ message: 'Review added', review})
+        }else{
+            response.status( 404 ).send({ message: 'Product not found'})
+        }
+    }).catch((error) => {
+        response.status( 500 ).send( error );
+    });
+});
 
 module.exports = router;

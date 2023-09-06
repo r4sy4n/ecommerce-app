@@ -51,6 +51,9 @@ const ProductSchema = mongoose.Schema({
             comment: {
                 type: String,
                 required: true
+            },
+            createdAt: {
+                type: Date
             }
         },
         {
