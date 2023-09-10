@@ -5,24 +5,31 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
+import Paginate from '../components/Paginate';
 
 const ProductListScreen = () => {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { pageNumber } = useParams();
+    const [page, setPage] = useState(0);
+    const [pages, setPages] = useState(0);
 
     // Set the default Axios configuration to include credentials
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products`).then( response => {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products/page/${pageNumber}`).then( response => {
           setProducts(response.data.products)
+          setPage(response.data.page)
+          setPages(response.data.pages)
           console.log(response)
           setIsLoading(false)
         }).catch((error) => {
           console.log(error)
           setIsLoading(false)
         })
-      }, []);
+      }, [pageNumber]);
 
     const deleteHandler = (id) => {
       setIsLoading(true)
@@ -103,6 +110,7 @@ const ProductListScreen = () => {
                 ))}
               </tbody>
             </Table>
+            <Paginate pages={pages} page={page} isAdmin={true} />
           </>
         )}
       </>

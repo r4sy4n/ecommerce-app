@@ -31,6 +31,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<SharedLayout/>} >
             <Route index element={<HomeScreen />} />
+            <Route path='/page/:pageNumber' element={<HomeScreen />} />
             <Route path='products/:id' element={<ProductScreen />} />
             <Route path='/cart' element={<CartScreen />} />
             <Route path='/login' element={<LoginScreen />} />
@@ -47,6 +48,7 @@ const App = () => {
             <Route path='' element={<AdminRoutes />}>
               <Route path='/admin/orderlist' element={<OrderListScreen />} />
               <Route path='/admin/productlist' element={<ProductListScreen />} />
+              <Route path='/admin/productlist/:pageNumber' element={<ProductListScreen />} />
               <Route path='/admin/products/:id/edit' element={<ProductEditScreen />} />
               <Route path='/admin/userlist' element={<UserListScreen />} />
               <Route path='/admin/users/:id/edit' element={<UserEditScreen />} />

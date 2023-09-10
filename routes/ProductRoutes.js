@@ -5,9 +5,13 @@ const verify = require('../middlewares/auth');
 const restrict = require('../middlewares/admin');
 
 //GET Endpoint to get all product
-router.get('/', ( request, response) => {
-    Product.find().then( product => {
-        response.status( 200 ).send({ count: product.length, products: product })
+router.get('/page/:pageNumber', ( request, response) => {
+    const pageSize = 4;
+    const page = Number(request.params.pageNumber) || 1;
+    Product.countDocuments().exec().then(totalCount => {
+        Product.find().limit(pageSize).skip(pageSize * (page - 1)).then( product => {
+            response.status( 200 ).send({ count: totalCount, products: product, page, pages: Math.ceil(totalCount / pageSize) })
+        })
     }).catch( error => {
         response.status( 404 ).send({ error: error });
     });

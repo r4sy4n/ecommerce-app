@@ -18,7 +18,7 @@ const ProductScreen = () => {
     const [addedToCart, setAddedToCart] = useState(false);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
-    const{ userInfo } = useContext(UserContext);
+    const { userInfo } = useContext(UserContext);
     const { addToCart } = useContext(CartContext);
     const navigate = useNavigate();
 
