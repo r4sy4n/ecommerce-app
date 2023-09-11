@@ -15,7 +15,7 @@ const MetaData = ({ title, description, keywords }) => {
 MetaData.defaultprops = {
     title: 'Welcome to Gr8life',
     description: 'Globally competitive products that promote health, beauty and wellness',
-    keywords: 'health, beauty, wellness, nutrition'
+    keywords: 'health, beauty, wellness, nutrition, ecommerce'
 }
 
 export default MetaData;

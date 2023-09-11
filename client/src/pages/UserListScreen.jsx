@@ -14,7 +14,6 @@ const UserListScreen = () => {
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users/admin`, {withCredentials: true} ).then(response => {
             setUsers(response.data.users)
-            console.log(response)
             setIsLoading(false)
         }).catch((error) => {
             console.log(error)

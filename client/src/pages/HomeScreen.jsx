@@ -22,7 +22,6 @@ const HomeScreen = () => {
       setPage(response.data.page)
       setPages(response.data.pages)
       setLoading(false)
-      console.log(response)
     }).catch((error) => {
       console.log(error)
       setLoading(false)

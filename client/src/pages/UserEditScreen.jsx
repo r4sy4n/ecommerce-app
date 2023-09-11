@@ -17,7 +17,6 @@ const UserEditScreen = () => {
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}/api/v1/users/admin/${id}`, {withCredentials: true}).then( response => {
-        console.log(response)
         setUsername(response.data.user)
         setEmail(response.data.email)
         setIsAdmin(response.data.isAdmin)
@@ -30,7 +29,6 @@ const UserEditScreen = () => {
     const submitHandler = (e) => {
         e.preventDefault()
         axios.put(`${import.meta.env.VITE_API_URL}/api/v1/users/admin/${id}`, { username, email, isAdmin }, {withCredentials: true}).then( response => {
-            console.log(response)
             navigate('/admin/userlist')
             toast.success('User updated')
         })

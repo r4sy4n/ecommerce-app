@@ -16,7 +16,6 @@ const Header = () => {
     const { userInfo, setUserInfo } = useContext(UserContext);
     const navigate = useNavigate();
 
-// console.log(userInfo)
     useEffect(() => {
         setCartItems(cart.reduce((total, item) => total + item.qty, 0))
     },[cartItems, cart])

@@ -54,7 +54,6 @@ const PlaceOrderScreen = () => {
                 setLoading(false);
                 toast.success(response.data.message);
                 navigate(`/orders/${response.data.dbResponse._id}`)
-                console.log(response)
             })
             .catch((error) => {
                 console.error(error);

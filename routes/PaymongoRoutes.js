@@ -19,7 +19,6 @@ router.post('/', ( request, response ) => {
         },
       },
     };
-    console.log('Checkout session data:', checkoutSessionData);
     axios.post(
       'https://api.paymongo.com/v1/checkout_sessions',
       checkoutSessionData,

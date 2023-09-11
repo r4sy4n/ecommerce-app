@@ -29,7 +29,6 @@ axios.defaults.withCredentials = true;
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}`).then(response => {
-            console.log(response.data.orders)
             setOrder(response.data.orders)
             setPaymentCreated(response.data.orders.paymentResult.created);
             setTimeout(() => {
@@ -75,7 +74,6 @@ axios.defaults.withCredentials = true;
             },
         };
     axios.post(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession`, requestBody).then(response => {
-            console.log(response)
             setCheckout_Url(response.data.data.attributes.checkout_url)
             setPaymentStatus(response.data.data.attributes.payment_intent.attributes.status)
             setIsLoading(false)
@@ -88,7 +86,6 @@ axios.defaults.withCredentials = true;
             axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/saveCheckoutSession`, {
                 checkoutSessionId: checkoutSessionId
             }).then(savedResponse => {
-                console.log('Checkout session ID saved:', savedResponse);
                 setOrder(savedResponse.data.savedOrder)
                 setPaymentCreated(savedResponse.data.savedOrder.paymentResult.created)
                 setIsLoading(false)
@@ -99,20 +96,17 @@ axios.defaults.withCredentials = true;
             console.log(error.response.data)
         })
     };
-console.log(paymentCreated)
-console.log(checkoutSessionId)
 
 useEffect(() => {
     if (paymentCreated) {
-      setCheckoutSessionId(order.paymentResult.id);
+        setCheckoutSessionId(order.paymentResult.id);
     }
-  }, [order.paymentResult, paymentCreated]);
+}, [order.paymentResult, paymentCreated]);
 
 useEffect(() => {
     if(checkoutSessionId){
         const fetchAndUpdateStatus = () => {
             axios.get(`${import.meta.env.VITE_API_URL}/api/v1/createCheckoutSession/${checkoutSessionId}`).then(response => {
-                console.log(response)
                 setPaymentStatus(response.data.data.attributes.payment_intent.attributes.status)
                 setCheckout_Url(response.data.data.attributes.checkout_url)
                 setIsLoading(false)
@@ -140,7 +134,6 @@ useEffect(() => {
                 datePaid: datePaid,
             };
             axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/pay`, {date}).then(response => {
-                console.log('res:', response)
                 setPaidData(response.data)
                 setDelivered(response.data.isDelivered)
                 setDeliveredAt(response.data.deliveredAt)
@@ -152,7 +145,6 @@ useEffect(() => {
     
     const deliverOrderHandler = () => {
         axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${id}/deliver`).then(response => {
-            console.log('delivered: res', response)
             setDelivered(response.data.isDelivered)
             setDeliveredAt(response.data.deliveredAt)
         }).catch(error => {
@@ -170,129 +162,129 @@ useEffect(() => {
     };
     
     return (
-    isLoading ? <Loading /> : error ? <Message variant='danger'>{error}</Message> : (
-        <>
-            <MetaData title='Orders' />
-            <h1>Order: {order._id}</h1>
-            <Row>
-                <Col md={8}>
-                    <ListGroup variant='flush'>
-                        <ListGroup.Item>
-                            <h2>Shipping</h2>
-                            <p><strong>Name: </strong> {order.user.username}</p>
-                            <p><strong>Email: </strong> {order.user.email}</p>
-                            <p><strong>Address: </strong> {order.shippingInfo.address},{' '}{order.shippingInfo.city}{' City '}{order.shippingInfo.zipCode}{' '}{order.shippingInfo.country}</p>
-                            <p><strong>Phone Number</strong> {order.shippingInfo.phoneNumber}</p>
-                            {delivered ? (
-                                <Message variant='success'>
-                                    Delivered on {new Date(deliveredAt).toLocaleString()}
-                                </Message>
-                            ) : (
-                                <Message variant='danger'>
-                                    Not Yet Delivered
-                                </Message>
-                            )}
-                        </ListGroup.Item>
-                        <ListGroup.Item>
-                            <h2>Payment Method</h2>
-                            <p>
-                                <strong>Method: </strong>
-                                {order.paymentMethod}
-                            </p>
-                            {paidData.isPaid ? (
-                                <Message variant='success'>
-                                    Paid on {paidData.paymentResult.datePaid.date.datePaid}
-                                </Message>
-                            ) : (
-                                <Message variant='danger'>
-                                    Not Yet Paid
-                                </Message>
-                            )}
-                        </ListGroup.Item>
-                        <ListGroup.Item>
-                            <h2>Order Items</h2>
-                            {order.orderItems.map((item, index) => (
-                                <ListGroup.Item key={index}>
-                                    <Row>
-                                        <Col md={1}>
-                                            <Image src={item.image} alt={item.name} fluid rounded />
-                                        </Col>
-                                        <Col>
-                                            <Link to={`/products/${item.product}`}>
-                                                {item.name}
-                                            </Link>
-                                        </Col>
-                                        <Col md={4}>
-                                            {item.quantity} x ₱{item.price} = ₱{item.quantity * item.price}
-                                        </Col>
-                                    </Row>
-                                </ListGroup.Item>
-                            ))}
-                        </ListGroup.Item>
-                    </ListGroup>
-                </Col>
-                <Col md={4}>
-                    <Card>
+        isLoading ? <Loading /> : error ? <Message variant='danger'>{error}</Message> : (
+            <>
+                <MetaData title='Orders' />
+                <h1>Order: {order._id}</h1>
+                <Row>
+                    <Col md={8}>
                         <ListGroup variant='flush'>
                             <ListGroup.Item>
-                                <h2>Order Summary</h2>
+                                <h2>Shipping</h2>
+                                <p><strong>Name: </strong> {order.user.username}</p>
+                                <p><strong>Email: </strong> {order.user.email}</p>
+                                <p><strong>Address: </strong> {order.shippingInfo.address},{' '}{order.shippingInfo.city}{' City '}{order.shippingInfo.zipCode}{' '}{order.shippingInfo.country}</p>
+                                <p><strong>Phone Number</strong> {order.shippingInfo.phoneNumber}</p>
+                                {delivered ? (
+                                    <Message variant='success'>
+                                        Delivered on {new Date(deliveredAt).toLocaleString()}
+                                    </Message>
+                                ) : (
+                                    <Message variant='danger'>
+                                        Not Yet Delivered
+                                    </Message>
+                                )}
                             </ListGroup.Item>
                             <ListGroup.Item>
-                                <Row>
-                                    <Col>Total Price:</Col>
-                                    <Col>₱{order.totalPrice}</Col>
-                                </Row>
-                            </ListGroup.Item>
-                            {!paidData.isPaid && (
-                                <ListGroup.Item>
-                                    {isLoading && <Loading />}
-                                {isLoading ? <Loading/> : (
-                                    (userInfo.username === order.user.username) ? (<Button
-                                        type='button'
-                                        className='btn-block'
-                                        variant='warning'
-                                        onClick={ payNowHandler }
-                                        disabled={paymentCreated === true}
-                                        >
-                                            Pay Now
-                                    </Button>) : (
-                                        <Message variant='danger'>
-                                        Not Yet Paid By {order.user.username}
+                                <h2>Payment Method</h2>
+                                <p>
+                                    <strong>Method: </strong>
+                                    {order.paymentMethod}
+                                </p>
+                                {paidData.isPaid ? (
+                                    <Message variant='success'>
+                                        Paid on {paidData.paymentResult.datePaid.date.datePaid}
                                     </Message>
-                                    ) 
-                                )}    
+                                ) : (
+                                    <Message variant='danger'>
+                                        Not Yet Paid
+                                    </Message>
+                                )}
                             </ListGroup.Item>
-                            )}
-                            {isLoading ? <Loading /> : (
-                                paymentCreated && !paidData.isPaid && (
-                                    <ListGroup.Item>
-                                        <Button 
-                                            type='button' 
-                                            className='btn btn-block' 
-                                            variant='success' 
-                                            onClick={checkoutHandler}>
-                                            Pay Via Paymongo
-                                        </Button>
+                            <ListGroup.Item>
+                                <h2>Order Items</h2>
+                                {order.orderItems.map((item, index) => (
+                                    <ListGroup.Item key={index}>
+                                        <Row>
+                                            <Col md={1}>
+                                                <Image src={item.image} alt={item.name} fluid rounded />
+                                            </Col>
+                                            <Col>
+                                                <Link to={`/products/${item.product}`}>
+                                                    {item.name}
+                                                </Link>
+                                            </Col>
+                                            <Col md={4}>
+                                                {item.quantity} x ₱{item.price} = ₱{item.quantity * item.price}
+                                            </Col>
+                                        </Row>
                                     </ListGroup.Item>
-                                )
-                            )}
-                            {isLoading ? <Loading /> : (
-                                userInfo && userInfo.isAdmin && paidData.isPaid && !delivered && (
-                                    <ListGroup.Item>
-                                        <Button type='button' className='btn btn-block' variant='warning' onClick={deliverOrderHandler}>
-                                            Mark As Delivered
-                                        </Button>
-                                    </ListGroup.Item>
-                                )
-                            )}                    
-                            
+                                ))}
+                            </ListGroup.Item>
                         </ListGroup>
-                    </Card>
-                </Col>
-            </Row>
-        </>
+                    </Col>
+                    <Col md={4}>
+                        <Card>
+                            <ListGroup variant='flush'>
+                                <ListGroup.Item>
+                                    <h2>Order Summary</h2>
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    <Row>
+                                        <Col>Total Price:</Col>
+                                        <Col>₱{order.totalPrice}</Col>
+                                    </Row>
+                                </ListGroup.Item>
+                                {!paidData.isPaid && (
+                                    <ListGroup.Item>
+                                        {isLoading && <Loading />}
+                                    {isLoading ? <Loading/> : (
+                                        (userInfo.username === order.user.username) ? (<Button
+                                            type='button'
+                                            className='btn-block'
+                                            variant='warning'
+                                            onClick={ payNowHandler }
+                                            disabled={paymentCreated === true}
+                                            >
+                                                Pay Now
+                                        </Button>) : (
+                                            <Message variant='danger'>
+                                            Not Yet Paid By {order.user.username}
+                                        </Message>
+                                        ) 
+                                    )}    
+                                </ListGroup.Item>
+                                )}
+                                {isLoading ? <Loading /> : (
+                                    paymentCreated && !paidData.isPaid && (
+                                        <ListGroup.Item>
+                                            <Button 
+                                                type='button' 
+                                                className='btn btn-block' 
+                                                variant='success' 
+                                                onClick={checkoutHandler}>
+                                                Pay Via Paymongo
+                                            </Button>
+                                        </ListGroup.Item>
+                                    )
+                                )}
+                                {isLoading ? <Loading /> : (
+                                    userInfo && userInfo.isAdmin && paidData.isPaid && !delivered && (
+                                        <ListGroup.Item>
+                                            <Button type='button' className='btn btn-block' variant='warning' onClick={deliverOrderHandler}>
+                                                Mark As Delivered
+                                            </Button>
+                                        </ListGroup.Item>
+                                    )
+                                )}                    
+                                
+                            </ListGroup>
+                        </Card>
+                    </Col>
+                </Row>
+            </>
+        )
     )
-  )
 }
 
 export default OrderScreen;

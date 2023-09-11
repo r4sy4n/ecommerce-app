@@ -21,7 +21,6 @@ const ProductEditScreen = () => {
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`).then( response => {
-      console.log(response)
       setProductName(response.data.products.productName)
       setPrice(response.data.products.price)
       setImages(response.data.products.images)
@@ -37,7 +36,6 @@ const ProductEditScreen = () => {
   const submitHandler = (e) => {
     e.preventDefault()
     axios.put(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`, { productName, price, images, category, stock, description }, {withCredentials: true}).then( response => {
-      console.log(response)
       navigate('/admin/productlist')
       toast.success('Product updated')
     })

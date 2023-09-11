@@ -24,7 +24,6 @@ const ProductListScreen = () => {
           setProducts(response.data.products)
           setPage(response.data.page)
           setPages(response.data.pages)
-          console.log(response)
           setIsLoading(false)
         }).catch((error) => {
           console.log(error)
@@ -36,7 +35,6 @@ const ProductListScreen = () => {
       setIsLoading(true)
       if(window.confirm('Delete this product?')){
         axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`).then(response => {
-          console.log(response)
           toast.success(response.data.message)
           const updatedProducts = products.filter((product) => product._id !== id);
           setProducts(updatedProducts); // Update products state here

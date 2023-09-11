@@ -3,10 +3,11 @@ const router = express.Router();
 const Product = require('../models/ProductModel');
 const verify = require('../middlewares/auth');
 const restrict = require('../middlewares/admin');
+const PAGINATION_LIMIT = process.env.PAGINATION_LIMIT;
 
 //GET Endpoint to get all product
 router.get('/page/:pageNumber', ( request, response) => {
-    const pageSize = 4;
+    const pageSize = PAGINATION_LIMIT;
     const page = Number(request.params.pageNumber) || 1;
     const keyword = request.query.keyword ? { productName: { $regex: request.query.keyword, $options: 'i' }} : {};
 

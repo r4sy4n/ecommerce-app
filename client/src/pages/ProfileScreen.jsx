@@ -49,7 +49,6 @@ const ProfileScreen = () => {
     useEffect(() => {
         setIsLoading(true)
         axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/myorders`, {withCredentials: true}).then(response => {
-            console.log(response)
             setMyOrders(response.data.myOrders)
             setIsLoading(false)
         })
