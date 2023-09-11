@@ -5,6 +5,7 @@ import { FaTimes, FaTrash, FaCheck, FaEdit } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import MetaData from '../components/MetaData';
 
 const UserListScreen = () => {
     const [users, setUsers] = useState([]);
@@ -37,6 +38,7 @@ const UserListScreen = () => {
 
     return (
         <>
+            <MetaData title='User List' />
             <h1>Users</h1>
             {isLoading ? (
                 <Loading />

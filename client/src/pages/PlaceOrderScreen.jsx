@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import Message from '../components/Message';
+import MetaData from '../components/MetaData';
 
 const PlaceOrderScreen = () => {
     const navigate = useNavigate();
@@ -64,6 +65,7 @@ const PlaceOrderScreen = () => {
 
   return (
     <>
+        <MetaData title='Place Order' />
         <CheckoutSteps step1 step2 step3 step4 />
         <Row>
             <Col md={8}>

@@ -6,6 +6,7 @@ import Loading from '../components/Loading';
 import { Link, useParams } from 'react-router-dom';
 import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
+import MetaData from '../components/MetaData';
 
 const HomeScreen = () => {
   const [products, setProducts] = useState([]);
@@ -33,6 +34,7 @@ const HomeScreen = () => {
       {!keyword ? <ProductCarousel /> : <Link to='/' className='btn btn-dark mb-4'>Go Back</Link>}
       {loading ? <Loading/> : (
         <div>
+          <MetaData title='Welcome to Gr8life' />
           <h1>Latest Products</h1>
           <Row>
             {products.map((product) => (

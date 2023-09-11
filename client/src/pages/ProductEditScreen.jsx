@@ -5,6 +5,7 @@ import FormContainer from '../components/FormContainer';
 import Loading from '../components/Loading';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import MetaData from '../components/MetaData';
 
 const ProductEditScreen = () => {
   const { id } = useParams();
@@ -44,6 +45,7 @@ const ProductEditScreen = () => {
 
   return (
     <>
+      <MetaData title='Edit Product' />
       <Link to='/admin/productlist' className='btn btn-light my-3'>
         Go Back
       </Link>

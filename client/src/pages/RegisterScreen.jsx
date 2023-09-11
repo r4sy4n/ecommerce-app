@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import { UserContext } from '../context/UserContext';
+import MetaData from '../components/MetaData';
 
 const RegisterScreen = () => {
     const [name, setName] = useState('')
@@ -48,57 +49,60 @@ axios.defaults.withCredentials = true;
     }
 
   return (
-    <FormContainer>
-        <h1>Register</h1>
+    <>
+        <MetaData title='Register' />
+        <FormContainer>
+            <h1>Register</h1>
 
-        <Form onSubmit={submitHandler}>
-        <Form.Group controlId='name' className='my-3'>
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                    type='text'
-                    placeholder='Enter name'
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                ></Form.Control>
-            </Form.Group>
-            <Form.Group controlId='email' className='my-3'>
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                    type='email'
-                    placeholder='Enter email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                ></Form.Control>
-            </Form.Group>
-            <Form.Group controlId='password' className='my-3'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                    type='password'
-                    placeholder='Enter password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                ></Form.Control>
-            </Form.Group>
-            <Form.Group controlId='confirmPassword' className='my-3'>
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control
-                    type='password'
-                    placeholder='Confirm password'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                ></Form.Control>
-            </Form.Group>
-            <Button type='submit' variant='warning' className='mt-2' disabled={ isLoading }>
-                Register
-            </Button>
-            { isLoading && <Loading/>}
-        </Form>
-        <Row className='py-3'>
-            <Col>
-                Already have an account? <Link to={ redirect ? `/login?redirect=${redirect}` : '/login' }>Login</Link>
-            </Col>
-        </Row>
-    </FormContainer>
+            <Form onSubmit={submitHandler}>
+            <Form.Group controlId='name' className='my-3'>
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Enter name'
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId='email' className='my-3'>
+                    <Form.Label>Email Address</Form.Label>
+                    <Form.Control
+                        type='email'
+                        placeholder='Enter email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId='password' className='my-3'>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                        type='password'
+                        placeholder='Enter password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId='confirmPassword' className='my-3'>
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control
+                        type='password'
+                        placeholder='Confirm password'
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Button type='submit' variant='warning' className='mt-2' disabled={ isLoading }>
+                    Register
+                </Button>
+                { isLoading && <Loading/>}
+            </Form>
+            <Row className='py-3'>
+                <Col>
+                    Already have an account? <Link to={ redirect ? `/login?redirect=${redirect}` : '/login' }>Login</Link>
+                </Col>
+            </Row>
+        </FormContainer>
+    </>
   )
 }
 

@@ -4,6 +4,7 @@ import { Table, Button } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import MetaData from '../components/MetaData';
 
 const OrderListScreen = () => {
   const [orders, setOrders] = useState([]);
@@ -22,6 +23,7 @@ const OrderListScreen = () => {
 
   return (
     <>
+      <MetaData title='Order List' />
       <h1>Orders</h1>
       {isLoading ? (
         <Loading />

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import { UserContext } from '../context/UserContext';
+import MetaData from '../components/MetaData';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
@@ -39,39 +40,42 @@ axios.defaults.withCredentials = true;
     }
 
   return (
-    <FormContainer>
-        <h1>Sign In</h1>
+    <>
+        <MetaData title='Login' />
+        <FormContainer>
+            <h1>Sign In</h1>
 
-        <Form onSubmit={submitHandler}>
-            <Form.Group controlId='email' className='my-3'>
-                <Form.Label>Email Address</Form.Label>
-                <Form.Control
-                    type='email'
-                    placeholder='Enter email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                ></Form.Control>
-            </Form.Group>
-            <Form.Group controlId='password' className='my-3'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                    type='password'
-                    placeholder='Enter password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                ></Form.Control>
-            </Form.Group>
-            <Button type='submit' variant='warning' className='mt-2' disabled={ isLoading }>
-                Sign In
-            </Button>
-            { isLoading && <Loading/>}
-        </Form>
-        <Row className='py-3'>
-            <Col>
-                No Account Yet? <Link to={ redirect ? `/register?redirect=${redirect}` : '/register' }>Register</Link>
-            </Col>
-        </Row>
-    </FormContainer>
+            <Form onSubmit={submitHandler}>
+                <Form.Group controlId='email' className='my-3'>
+                    <Form.Label>Email Address</Form.Label>
+                    <Form.Control
+                        type='email'
+                        placeholder='Enter email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId='password' className='my-3'>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                        type='password'
+                        placeholder='Enter password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    ></Form.Control>
+                </Form.Group>
+                <Button type='submit' variant='warning' className='mt-2' disabled={ isLoading }>
+                    Sign In
+                </Button>
+                { isLoading && <Loading/>}
+            </Form>
+            <Row className='py-3'>
+                <Col>
+                    No Account Yet? <Link to={ redirect ? `/register?redirect=${redirect}` : '/register' }>Register</Link>
+                </Col>
+            </Row>
+        </FormContainer>
+    </>
   )
 }
 

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import Paginate from '../components/Paginate';
+import MetaData from '../components/MetaData';
 
 const ProductListScreen = () => {
     const [products, setProducts] = useState([]);
@@ -61,6 +62,7 @@ const ProductListScreen = () => {
 
     return (
       <>
+        <MetaData title='Product List' />
         <Row className='align-items-center'>
           <Col>
             <h1>Products</h1>

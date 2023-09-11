@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { toast } from 'react-toastify';
 import CheckoutSteps from '../components/CheckoutSteps';
+import MetaData from '../components/MetaData';
 
 const ShippingScreen = () => {
     const { shippingAddress, saveShippingAddress } = useContext(CartContext);
@@ -45,60 +46,63 @@ const ShippingScreen = () => {
     }
 
   return (
-    <FormContainer>
-        <CheckoutSteps step1 step2 />
-        <h1>Shipping</h1>
+    <>
+        <MetaData title='Shipping' />
+        <FormContainer>
+            <CheckoutSteps step1 step2 />
+            <h1>Shipping</h1>
 
-        <Form onSubmit={submitHandler}>
-            <Form.Group controlId='address' className='my-2'>
-                <Form.Label>Address</Form.Label>
-                <Form.Control
-                    type='text'
-                    placeholder='Enter address'
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}>
-                </Form.Control>
-            </Form.Group>
-            <Form.Group controlId='city' className='my-2'>
-                <Form.Label>City</Form.Label>
-                <Form.Control
-                    type='text'
-                    placeholder='Enter city'
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}>
-                </Form.Control>
-            </Form.Group>
-            <Form.Group controlId='zipCode' className='my-2'>
-                <Form.Label>Zip Code</Form.Label>
-                <Form.Control
-                    type='text'
-                    placeholder='Enter zip code'
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}>
-                </Form.Control>
-            </Form.Group>
-            <Form.Group controlId='phoneNumber' className='my-2'>
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                    type='string'
-                    placeholder='Enter phone number'
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}>
-                </Form.Control>
-            </Form.Group>
-            <Form.Group controlId='country' className='my-2'>
-                <Form.Label>Country</Form.Label>
-                <Form.Control
-                    type='text'
-                    placeholder='Enter country'
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}>
-                </Form.Control>
-            </Form.Group>
+            <Form onSubmit={submitHandler}>
+                <Form.Group controlId='address' className='my-2'>
+                    <Form.Label>Address</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Enter address'
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId='city' className='my-2'>
+                    <Form.Label>City</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Enter city'
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId='zipCode' className='my-2'>
+                    <Form.Label>Zip Code</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Enter zip code'
+                        value={zipCode}
+                        onChange={(e) => setZipCode(e.target.value)}>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId='phoneNumber' className='my-2'>
+                    <Form.Label>Phone Number</Form.Label>
+                    <Form.Control
+                        type='string'
+                        placeholder='Enter phone number'
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId='country' className='my-2'>
+                    <Form.Label>Country</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Enter country'
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}>
+                    </Form.Control>
+                </Form.Group>
 
-            <Button type='submit' variant='warning' className='my-2'>Continue</Button>
-        </Form>
-    </FormContainer>
+                <Button type='submit' variant='warning' className='my-2'>Continue</Button>
+            </Form>
+        </FormContainer>
+    </>
   )
 }
 

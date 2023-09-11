@@ -6,6 +6,7 @@ import Message from '../components/Message';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import MetaData from '../components/MetaData';
 
 const OrderScreen = () => {
     const { id } = useParams();
@@ -101,13 +102,6 @@ axios.defaults.withCredentials = true;
 console.log(paymentCreated)
 console.log(checkoutSessionId)
 
-// useEffect(() => {
-//     if (checkout_url) {
-//         // Open the checkout URL in a new window
-//         window.open(checkout_url, '_blank');
-//     }
-// },[checkout_url])
-
 useEffect(() => {
     if (paymentCreated) {
       setCheckoutSessionId(order.paymentResult.id);
@@ -178,6 +172,7 @@ useEffect(() => {
     return (
     isLoading ? <Loading /> : error ? <Message variant='danger'>{error}</Message> : (
         <>
+            <MetaData title='Orders' />
             <h1>Order: {order._id}</h1>
             <Row>
                 <Col md={8}>

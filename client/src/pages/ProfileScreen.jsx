@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { FaTimes } from 'react-icons/fa';
+import MetaData from '../components/MetaData';
 
 const ProfileScreen = () => {
     const [username, setUserName] = useState('');
@@ -55,106 +56,109 @@ const ProfileScreen = () => {
     },[])
 
   return (
-    <Row>
-        <Col md={3}>
-            <h2>User Profile</h2>
+    <>
+        <MetaData title='Profile' />
+        <Row>
+            <Col md={3}>
+                <h2>User Profile</h2>
 
-            <Form onSubmit={submitHandler}>
-                <Form.Group controlId='name' className='my-2'>
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                        type='name'
-                        placeholder='Enter name'
-                        value={username}
-                        onChange={(e) => setUserName(e.target.value)}
-                    ></Form.Control>
-                </Form.Group>
+                <Form onSubmit={submitHandler}>
+                    <Form.Group controlId='name' className='my-2'>
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control
+                            type='name'
+                            placeholder='Enter name'
+                            value={username}
+                            onChange={(e) => setUserName(e.target.value)}
+                        ></Form.Control>
+                    </Form.Group>
 
-                <Form.Group controlId='email' className='my-2'>
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                        type='email'
-                        placeholder='Enter email'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    ></Form.Control>
-                </Form.Group>
+                    <Form.Group controlId='email' className='my-2'>
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            type='email'
+                            placeholder='Enter email'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        ></Form.Control>
+                    </Form.Group>
 
-                <Form.Group controlId='password' className='my-2'>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type='password'
-                        placeholder='Enter password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    ></Form.Control>
-                </Form.Group>
+                    <Form.Group controlId='password' className='my-2'>
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type='password'
+                            placeholder='Enter password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        ></Form.Control>
+                    </Form.Group>
 
-                <Form.Group controlId='confirmPassword' className='my-2'>
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                        type='password'
-                        placeholder='Confirm password'
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    ></Form.Control>
-                </Form.Group>
+                    <Form.Group controlId='confirmPassword' className='my-2'>
+                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Control
+                            type='password'
+                            placeholder='Confirm password'
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        ></Form.Control>
+                    </Form.Group>
 
-                <Button type='submit' variant='warning' className='my-2'>
-                    Update
-                </Button>
-                {isLoading && <Loading />}
-            </Form>
-        </Col>
-        <Col md={9}>
-            <h2>My Orders</h2>
+                    <Button type='submit' variant='warning' className='my-2'>
+                        Update
+                    </Button>
+                    {isLoading && <Loading />}
+                </Form>
+            </Col>
+            <Col md={9}>
+                <h2>My Orders</h2>
 
-            {isLoading ? <Loading /> : (
-                <Table striped hover bordered responsive className='table-sm'>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>DATE</th>
-                            <th>TOTAL</th>
-                            <th>PAID</th>
-                            <th>DELIVERED</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {myOrders.map((order) => (
-                            <tr key={order._id}>
-                                <td>{order._id}</td>
-                                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                                <td>₱{order.totalPrice}</td>
-                                <td>
-                                    {order.isPaid ? (
-                                        <span>{new Date(order.paymentResult.datePaid.date.datePaid).toLocaleDateString()}</span>
-                                    ) : (
-                                        <FaTimes style={{ color: 'red' }}/>
-                                    )}
-                                </td>
-                                <td>
-                                    {order.isDelivered ? (
-                                        order.deliveredAt.substring(0, 10)
-                                    ) : (
-                                        <FaTimes style={{ color: 'red' }}/>
-                                    )}
-                                </td>
-                                <td>
-                                    <LinkContainer to={`/orders/${order._id}`}>
-                                        <Button variant='light' className='btn-sm'>
-                                            Details
-                                        </Button>
-                                    </LinkContainer>
-                                </td>
+                {isLoading ? <Loading /> : (
+                    <Table striped hover bordered responsive className='table-sm'>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>DATE</th>
+                                <th>TOTAL</th>
+                                <th>PAID</th>
+                                <th>DELIVERED</th>
+                                <th></th>
                             </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            )}
-        </Col>
-    </Row>
+                        </thead>
+                        <tbody>
+                            {myOrders.map((order) => (
+                                <tr key={order._id}>
+                                    <td>{order._id}</td>
+                                    <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                                    <td>₱{order.totalPrice}</td>
+                                    <td>
+                                        {order.isPaid ? (
+                                            <span>{new Date(order.paymentResult.datePaid.date.datePaid).toLocaleDateString()}</span>
+                                        ) : (
+                                            <FaTimes style={{ color: 'red' }}/>
+                                        )}
+                                    </td>
+                                    <td>
+                                        {order.isDelivered ? (
+                                            order.deliveredAt.substring(0, 10)
+                                        ) : (
+                                            <FaTimes style={{ color: 'red' }}/>
+                                        )}
+                                    </td>
+                                    <td>
+                                        <LinkContainer to={`/orders/${order._id}`}>
+                                            <Button variant='light' className='btn-sm'>
+                                                Details
+                                            </Button>
+                                        </LinkContainer>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                )}
+            </Col>
+        </Row>
+    </>
   )
 }
 

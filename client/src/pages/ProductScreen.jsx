@@ -8,7 +8,7 @@ import { CartContext } from "../context/CartContext";
 import { UserContext } from '../context/UserContext';
 import Message from '../components/Message';
 import { toast } from 'react-toastify';
-
+import MetaData from "../components/MetaData";
 
 const ProductScreen = () => {
     const { id } = useParams();
@@ -80,6 +80,7 @@ const ProductScreen = () => {
     <>
         {loading ? <Loading/> : (
             <div>
+                <MetaData title={products.productName} />
                 <Link className="btn btn-dark my-3" to='/'>
                     Back
                 </Link>

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Carousel, Image } from 'react-bootstrap';
 import Loading from '../components/Loading';
-import Message from '../components/Message';
 import axios from 'axios';
 
 const ProductCarousel = () => {
