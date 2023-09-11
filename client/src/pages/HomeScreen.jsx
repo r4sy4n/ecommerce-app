@@ -5,6 +5,7 @@ import axios from 'axios';
 import Loading from '../components/Loading';
 import { Link, useParams } from 'react-router-dom';
 import Paginate from '../components/Paginate';
+import ProductCarousel from '../components/ProductCarousel';
 
 const HomeScreen = () => {
   const [products, setProducts] = useState([]);
@@ -29,7 +30,7 @@ const HomeScreen = () => {
 
   return (
     <>
-      {keyword && <Link to='/' className='btn btn-dark mb-4'>Go Back</Link>}
+      {!keyword ? <ProductCarousel /> : <Link to='/' className='btn btn-dark mb-4'>Go Back</Link>}
       {loading ? <Loading/> : (
         <div>
           <h1>Latest Products</h1>

@@ -19,6 +19,13 @@ router.get('/page/:pageNumber', ( request, response) => {
     });
 });
 
+//GET Endpoint to get top rated products
+router.get('/top', ( request, response ) => {
+    Product.find({}).sort({ ratings: -1 }).limit(3).then(product => {
+        response.status( 200 ).send({ product: product })
+    })
+});
+
 //GET Endpoint to get specific product
 router.get('/:id', ( request, response ) => {
     Product.findOne({ _id: request.params.id }).then( dbResponse => {
