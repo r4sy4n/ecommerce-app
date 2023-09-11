@@ -8,7 +8,8 @@ const Footer = () => {
         <Container>
             <Row>
                 <Col className="text-center py-3">
-                    <p>Ecom v2 &copy; {currentYear}</p>
+                    <p>Gr8life Ecommerce Shop {currentYear}</p>
+                    <p>Coded by <a href="https://russellramiro.netlify.app/" target="_blank" rel="noreferrer">Russell Ramiro</a> &copy; 2023</p>
                 </Col>
             </Row>
         </Container>

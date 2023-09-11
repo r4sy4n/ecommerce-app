@@ -7,6 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 import Paginate from '../components/Paginate';
 import ProductCarousel from '../components/ProductCarousel';
 import MetaData from '../components/MetaData';
+import Message from '../components/Message';
 
 const HomeScreen = () => {
   const [products, setProducts] = useState([]);
@@ -32,19 +33,25 @@ const HomeScreen = () => {
   return (
     <>
       {!keyword ? <ProductCarousel /> : <Link to='/' className='btn btn-dark mb-4'>Go Back</Link>}
+      <MetaData title='Welcome to Gr8life Shop' />
+      <h1>Latest Products</h1>
       {loading ? <Loading/> : (
-        <div>
-          <MetaData title='Welcome to Gr8life' />
-          <h1>Latest Products</h1>
-          <Row>
-            {products.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
-          <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''}/>
-        </div>
+        products.length === 0 ? (
+            <Message variant='danger'>
+              No Products Found
+            </Message>
+        ) : (
+            <div>
+              <Row>
+                {products.map((product) => (
+                  <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    <Product product={product} />
+                  </Col>
+                ))}
+              </Row>
+              <Paginate pages={pages} page={page} keyword={keyword ? keyword : ''}/>
+            </div>
+          )
       )}
     </>
   );
