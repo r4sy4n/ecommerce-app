@@ -31,6 +31,7 @@ const UserEditScreen = () => {
         axios.put(`${import.meta.env.VITE_API_URL}/api/v1/users/admin/${id}`, { username, email, isAdmin }, {withCredentials: true}).then( response => {
             navigate('/admin/userlist')
             toast.success('User updated')
+            console.log(response)
         })
         .catch(error => {
             console.log(error)
