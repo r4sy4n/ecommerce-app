@@ -8,14 +8,16 @@ const restrict = require('../middlewares/admin');
 router.get('/page/:pageNumber', ( request, response) => {
     const pageSize = 4;
     const page = Number(request.params.pageNumber) || 1;
-    Product.countDocuments().exec().then(totalCount => {
-        Product.find().limit(pageSize).skip(pageSize * (page - 1)).then( product => {
-            response.status( 200 ).send({ count: totalCount, products: product, page, pages: Math.ceil(totalCount / pageSize) })
+    const keyword = request.query.keyword ? { productName: { $regex: request.query.keyword, $options: 'i' }} : {};
+
+    Product.countDocuments({...keyword}).exec().then(totalCount => {
+        Product.find({...keyword}).limit(pageSize).skip(pageSize * (page - 1)).then( product => {
+            response.status( 200 ).send({ keyword, count: totalCount, products: product, page, pages: Math.ceil(totalCount / pageSize) })
         })
     }).catch( error => {
         response.status( 404 ).send({ error: error });
     });
-})
+});
 
 //GET Endpoint to get specific product
 router.get('/:id', ( request, response ) => {

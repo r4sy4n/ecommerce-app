@@ -31,7 +31,9 @@ const App = () => {
         <Routes>
           <Route path='/' element={<SharedLayout/>} >
             <Route index element={<HomeScreen />} />
+            <Route path='/search/:keyword' element={<HomeScreen />} />
             <Route path='/page/:pageNumber' element={<HomeScreen />} />
+            <Route path='/search/:keyword/page/:pageNumber' element={<HomeScreen />} />
             <Route path='products/:id' element={<ProductScreen />} />
             <Route path='/cart' element={<CartScreen />} />
             <Route path='/login' element={<LoginScreen />} />
