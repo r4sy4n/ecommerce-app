@@ -15,15 +15,27 @@ router.post('/register', ( request, response ) => {
             //  db has record of response
             response.status( 400 ).send({ error: 'User already exists' });
         }else{
-             bcrypt.hash( request.body.password, 10 ).then((hash, err) => {
+            bcrypt.hash( request.body.password, 10 ).then((hash, err) => {
                 const newUser = new User({ 
                     username: request.body.username, 
                     email: request.body.email,  
                     password: hash,
                     isAdmin: request.body.isAdmin
                 });
+                //create token
+                const token = jwt.sign( { 
+                    id: dbResponse._id, 
+                    name: dbResponse.username, 
+                    email: dbResponse.email, 
+                    isAdmin: dbResponse.isAdmin 
+                }, SECRET, {
+                    expiresIn: JWT_EXPIRE_TIME
+                } );
+                // Set the expiration time for the cookie (e.g., 1 day)
+                const expirationTime = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+                const expirationDate = new Date(Date.now() + COOKIE_EXPIRE_TIME * expirationTime);
                 newUser.save().then( dbResponse => {
-                    response.status( 201 ).send({ message: 'Registration Successful', username: dbResponse.username, email: dbResponse.email, isAdmin: dbResponse.isAdmin, success: true });
+                    response.cookie('token', token, { httpOnly: true, sameSite: 'strict', expiresIn: expirationDate }).status( 201 ).send({ message: 'Registration Successful', username: dbResponse.username, email: dbResponse.email, isAdmin: dbResponse.isAdmin, success: true });
                 });
             });
         };
