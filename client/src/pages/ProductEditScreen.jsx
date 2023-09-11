@@ -36,6 +36,7 @@ const ProductEditScreen = () => {
   const submitHandler = (e) => {
     e.preventDefault()
     axios.put(`${import.meta.env.VITE_API_URL}/api/v1/products/${id}`, { productName, price, images, category, stock, description }, {withCredentials: true}).then( response => {
+      console.log(response)
       navigate('/admin/productlist')
       toast.success('Product updated')
     })
