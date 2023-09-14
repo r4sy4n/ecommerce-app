@@ -35,17 +35,18 @@ app.use( `${baseURL}/users`, UserRoutes );
 app.use( `${baseURL}/orders`, OrderRoutes );
 app.use( `${baseURL}/createCheckoutSession`, PaymongoRoutes );
 
-if(process.env.NODE_ENV === 'production'){
+if(process.env.NODE_ENV === 'development'){
+    app.get( '/', ( request, response ) => {
+        response.send({ message: `Express server for Ecommerce App V2`});
+
+    })
+}else{
     //set static folder
     app.use(express.static(path.join(__dirname, 'client/dist')));
 
     //any route that is not api will be redirected to index.html
     app.get('*', ( request, response ) =>{
         response.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
-    })
-}else{
-    app.get( '/', ( request, response ) => {
-        response.send({ message: `Express server for Ecommerce App V2`});
     });
 }
 

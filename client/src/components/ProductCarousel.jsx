@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Carousel, Image } from 'react-bootstrap';
-import Loading from '../components/Loading';
+// import Loading from '../components/Loading';
 import axios from 'axios';
 
 const ProductCarousel = () => {
-    const [isLoading, setIsLoading] =  useState(true);
+    // const [isLoading, setIsLoading] =  useState(true);
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products/top`).then(response => {
             setProducts(response.data.product)
-            setIsLoading(false)
+            // setIsLoading(false)
         })
     },[])
 
 
     return (
-        isLoading ? <Loading /> : (
+
             <Carousel pause='hover' className='bg-primary mb-4'>
                 {products.map(product => (
                     <Carousel.Item key={product._id}>
@@ -30,7 +30,7 @@ const ProductCarousel = () => {
                     </Carousel.Item>
                 ))}
             </Carousel>
-        )
+        
     )
 }
 
