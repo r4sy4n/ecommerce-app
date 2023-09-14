@@ -35,7 +35,7 @@ axios.defaults.withCredentials = true;
             toast.error('Passwords do not match!');
             return
         }else{
-            axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/register`, { username: name, email: email, password: password }).then( response => {
+            axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/register`, { username: name, email: email, password: password }, {withCredentials: true}).then( response => {
                 localStorage.setItem('userInfo', JSON.stringify(response.data))
                 toast.success(response.data.message)
                 navigate(redirect)

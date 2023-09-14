@@ -35,7 +35,7 @@ router.post('/register', ( request, response ) => {
                 const expirationTime = 24 * 60 * 60 * 1000; // 1 day in milliseconds
                 const expirationDate = new Date(Date.now() + COOKIE_EXPIRE_TIME * expirationTime);
                 newUser.save().then( dbResponse => {
-                    response.cookie('token', token, { httpOnly: true, sameSite: 'strict', expiresIn: expirationDate }).status( 201 ).send({ message: 'Registration Successful', username: dbResponse.username, email: dbResponse.email, isAdmin: dbResponse.isAdmin, success: true });
+                    response.cookie('token', token, { httpOnly: true, sameSite: 'strict', expiresIn: expirationDate, secure: true, domain: '.onrender.com' }).status( 201 ).send({ message: 'Registration Successful', username: dbResponse.username, email: dbResponse.email, isAdmin: dbResponse.isAdmin, success: true });
                 });
             });
         };
@@ -64,7 +64,7 @@ router.post('/login', ( request, response ) => {
                      // Set the expiration time for the cookie (e.g., 1 day)
                 const expirationTime = 24 * 60 * 60 * 1000; // 1 day in milliseconds
                 const expirationDate = new Date(Date.now() + COOKIE_EXPIRE_TIME * expirationTime);
-                response.cookie('token', token, { httpOnly: true, sameSite: 'strict', expiresIn: expirationDate, secure: true, }).status( 200 ).send({
+                response.cookie('token', token, { httpOnly: true, sameSite: 'strict', expiresIn: expirationDate, secure: true, domain: '.onrender.com' }).status( 200 ).send({
                     username: dbResponse.username,
                     email: dbResponse.email,
                     message: 'Login Successful',

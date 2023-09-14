@@ -39,7 +39,6 @@ app.use( `${baseURL}/createCheckoutSession`, PaymongoRoutes );
 if(NODE_ENV === 'development'){
     app.get( '/', ( request, response ) => {
         response.send({ message: `Express server for Ecommerce App V2`});
-
     })
 }else{
     //set static folder
