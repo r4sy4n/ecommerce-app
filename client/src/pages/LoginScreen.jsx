@@ -29,7 +29,7 @@ axios.defaults.withCredentials = true;
 
     const submitHandler = (e) => {
         e.preventDefault();
-        axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, { email: email, password: password }).then( response => {
+        axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, { email: email, password: password }, {withCredentials: true}).then( response => {
             localStorage.setItem('userInfo', JSON.stringify(response.data))
             toast.success(response.data.message)
             navigate(redirect)
