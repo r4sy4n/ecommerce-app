@@ -46,7 +46,7 @@ if(NODE_ENV === 'development'){
 
     //any route that is not api will be redirected to index.html
     app.get('*', ( request, response ) =>{
-        response.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
+        response.sendFile(path.resolve(__dirname, 'client', 'dist', '/'))
     });
 }
 
