@@ -36,11 +36,11 @@ app.use( `${baseURL}/users`, UserRoutes );
 app.use( `${baseURL}/orders`, OrderRoutes );
 app.use( `${baseURL}/createCheckoutSession`, PaymongoRoutes );
 
-// if(NODE_ENV === 'development'){
-//     app.get( '/', ( request, response ) => {
-//         response.send({ message: `Express server for Ecommerce App V2`});
-//     })
-// }else{
+if(NODE_ENV === 'development'){
+    app.get( '/', ( request, response ) => {
+        response.send({ message: `Express server for Ecommerce App V2`});
+    })
+}else{
     //set static folder
     app.use(express.static(path.join(__dirname, 'client/dist')));
 
@@ -48,7 +48,7 @@ app.use( `${baseURL}/createCheckoutSession`, PaymongoRoutes );
     app.get('*', ( request, response ) =>{
         response.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
     });
-// }
+}
 
 app.listen( PORT, () => {
     console.log(`Server Running on Port ${PORT}`);
