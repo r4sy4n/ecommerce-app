@@ -91,4 +91,4 @@ If you have any questions, suggestions, or just want to say hello, feel free to 
 Thank you for visiting the Ecommerce App repository!
 
 ## Live Site
-https://ecommerce-app-frontend-6bpx.onrender.com
+https://gr8life-ecommerce-shop.onrender.com
