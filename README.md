@@ -63,7 +63,7 @@ To run the Ecommerce App locally, follow these steps:
 <ul>
 <li>Frontend:</li>
   <ul>
-<li>Vite</li>
+<li>React (Vite)</li>
 <li>HTML</li>
 <li>CSS</li>
 <li>JavaScript</li>
@@ -82,7 +82,7 @@ The Ecommerce App utilizes APIs for fetching and updating product information. M
 ## Credits
 This app was coded and developed by Russell Ramiro as a project to showcase programming skills and knowledge of web development technologies.
 
-##License
+## License
 This project is licensed under the MIT License. Feel free to use the code as a reference or template for your own bug tracking or issue management applications.
 
 ## Contact
